@@ -18,6 +18,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
+# Colorschema dark
+color_scheme: dark
+
 # site overview stuff
 title: HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s # After "Semesterarbeit" add the number of the semester, then the Subject and the name of the project
 email: miguel.schneider@iseag.ch # Add your email address here, if you want to be contacted by email
