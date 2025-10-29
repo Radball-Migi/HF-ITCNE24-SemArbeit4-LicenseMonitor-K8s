@@ -39,9 +39,9 @@ aux_links_new_tab: true
 
 
 # technical site stuff
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-logo: "" # Add your logo here, if you have one. This will be shown in the top left corner of the page.
-favicon_ico: "" # Add your favicon here, if you have one. This will be shown in the browser tab.
+url: "https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/"
+logo: "/ressources/images/migi_logo.png"
+favicon_ico: "/ressources/images/migi.jpg"
 remote_theme: just-the-docs/just-the-docs
 plugins:
   - jekyll-remote-theme
