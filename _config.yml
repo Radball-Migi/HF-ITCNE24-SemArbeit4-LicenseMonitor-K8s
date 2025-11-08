@@ -35,6 +35,7 @@ github_username:  "Radball-Migi"
 # external stuff
 aux_links:
   Projektplanung: "https://github.com/users/Radball-Migi/projects/9" # Add your Project planning link here
+  Artefakte Azure DevOps: "https://dev.azure.com/radballmigi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/_artifacts/feed/radballmigi"
 aux_links_new_tab: true
 
 
