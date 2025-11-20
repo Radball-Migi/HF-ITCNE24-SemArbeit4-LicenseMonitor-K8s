@@ -13,3 +13,9 @@ has_children: "false"
 ## Bilder
 
 ### Startseite
+
+
+
+
+
+URL Devops: [DevOps Market: Novel Approaches & Products - United States Cybersecurity Magazine](https://www.uscybersecurity.net/devops-market/)
