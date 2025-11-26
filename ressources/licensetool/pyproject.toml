@@ -14,6 +14,7 @@ exclude = '''
   | build
   | dist
   | __pycache__
+  | logs
 )/
 '''
 
@@ -25,14 +26,14 @@ exclude = '''
 profile = "black"
 line_length = 120
 known_first_party = ["app"]
-# Dein eigentlicher App-Code liegt hier:
-src_paths = ["ressources/licensetool"]
+src_paths = ["app"]
 skip = [
   ".venv",
   "venv",
   "build",
   "dist",
   "__pycache__",
+  "logs",
 ]
 
 ############################
@@ -42,8 +43,8 @@ skip = [
 [tool.ruff]
 line-length = 120
 target-version = "py310"
-# Das ist dein App-Code. Ruff berücksichtigt das bei Imports / Modulen.
-src = ["ressources/licensetool"]
+# Dein eigentlicher Code liegt unter app/
+src = ["app"]
 exclude = [
   ".git",
   ".venv",
@@ -51,28 +52,28 @@ exclude = [
   "build",
   "dist",
   "__pycache__",
+  "logs",
 ]
 
 [tool.ruff.lint]
-# Basis-Regeln: Pyflakes/pycodestyle, Warnungen, Bugbear, Import-Sortierung
 select = ["E", "F", "W", "B", "I"]
-# Black-kompatible Ausnahmen
-ignore = ["E203", "W503"]
+# Achtung: W503 NICHT verwenden, die Regel kennt Ruff nicht
+ignore = ["E203"]
 
 [tool.ruff.lint.per-file-ignores]
-# Blueprints: Hier sind die "seiteneffekt"-Imports absichtlich so
-"ressources/licensetool/app/auth/__init__.py" = ["E402", "F401"]
-"ressources/licensetool/app/licenses/__init__.py" = ["E402", "F401"]
+# Blueprints: Imports für Seiteneffekte sind gewollt
+"app/auth/__init__.py" = ["E402", "F401"]
+"app/licenses/__init__.py" = ["E402", "F401"]
 
 ############################
-# pytest – Test-Konfiguration
+# pytest
 ############################
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "-ra"
 testpaths = [
-  "ressources/licensetool/tests",
+  "test",
 ]
 
 ############################
@@ -83,11 +84,8 @@ testpaths = [
 python_version = "3.10"
 ignore_missing_imports = true
 warn_unused_configs = true
-# Du kannst das später schärfer stellen, wenn du willst
 disallow_untyped_defs = false
-
-# Damit mypy deine Module findet:
-mypy_path = ["ressources/licensetool"]
+mypy_path = ["app"]
 
 ############################
 # Bandit – Security-Scanner
@@ -95,11 +93,12 @@ mypy_path = ["ressources/licensetool"]
 
 [tool.bandit]
 exclude = [
-  "tests",
+  "test",
   ".venv",
   "venv",
   "build",
   "dist",
   "__pycache__",
+  "logs",
 ]
 skips = []
