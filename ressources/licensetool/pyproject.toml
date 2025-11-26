@@ -1,0 +1,105 @@
+############################
+# Black – Code Formatter
+############################
+
+[tool.black]
+line-length = 120
+target-version = ["py310"]
+include = '\.pyi?$'
+exclude = '''
+/(
+  \.git
+  | \.venv
+  | venv
+  | build
+  | dist
+  | __pycache__
+)/
+'''
+
+############################
+# isort – Import Sortierung
+############################
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["app"]
+# Dein eigentlicher App-Code liegt hier:
+src_paths = ["ressources/licensetool"]
+skip = [
+  ".venv",
+  "venv",
+  "build",
+  "dist",
+  "__pycache__",
+]
+
+############################
+# Ruff – Linter
+############################
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+# Das ist dein App-Code. Ruff berücksichtigt das bei Imports / Modulen.
+src = ["ressources/licensetool"]
+exclude = [
+  ".git",
+  ".venv",
+  "venv",
+  "build",
+  "dist",
+  "__pycache__",
+]
+
+[tool.ruff.lint]
+# Basis-Regeln: Pyflakes/pycodestyle, Warnungen, Bugbear, Import-Sortierung
+select = ["E", "F", "W", "B", "I"]
+# Black-kompatible Ausnahmen
+ignore = ["E203", "W503"]
+
+[tool.ruff.lint.per-file-ignores]
+# Blueprints: Hier sind die "seiteneffekt"-Imports absichtlich so
+"ressources/licensetool/app/auth/__init__.py" = ["E402", "F401"]
+"ressources/licensetool/app/licenses/__init__.py" = ["E402", "F401"]
+
+############################
+# pytest – Test-Konfiguration
+############################
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra"
+testpaths = [
+  "ressources/licensetool/tests",
+]
+
+############################
+# mypy – Typprüfung
+############################
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_configs = true
+# Du kannst das später schärfer stellen, wenn du willst
+disallow_untyped_defs = false
+
+# Damit mypy deine Module findet:
+mypy_path = ["ressources/licensetool"]
+
+############################
+# Bandit – Security-Scanner
+############################
+
+[tool.bandit]
+exclude = [
+  "tests",
+  ".venv",
+  "venv",
+  "build",
+  "dist",
+  "__pycache__",
+]
+skips = []
