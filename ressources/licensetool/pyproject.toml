@@ -59,6 +59,9 @@ exclude = [
 select = ["E", "F", "W", "B", "I"]
 ignore = ["E203", "F401"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["app", "config"]
+
 [tool.ruff.lint.per-file-ignores]
 # Blueprints: Imports für Seiteneffekte sind gewollt
 "app/auth/__init__.py" = ["E402", "F401"]
