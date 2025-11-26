@@ -57,7 +57,7 @@ exclude = [
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "B", "I"]
-ignore = ["E203", "E401"]
+ignore = ["E203", "F401"]
 
 [tool.ruff.lint.per-file-ignores]
 # Blueprints: Imports für Seiteneffekte sind gewollt
