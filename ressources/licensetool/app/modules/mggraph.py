@@ -1,11 +1,12 @@
 # app/modules/mggraph.py
 
 import json
-import os
-import requests
-from urllib.parse import quote
-from msal import ConfidentialClientApplication
 import logging
+import os
+from urllib.parse import quote
+
+import requests
+from msal import ConfidentialClientApplication
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +106,7 @@ class SharePointClientTask(SharePointClient):
             logger.error(f"Token acquisition failed: {result.get('error_description')}")
             raise Exception(f"Token acquisition failed: {result.get('error_description')}")
 
-        token = result["access_token"] 
+        token = result["access_token"]
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json"

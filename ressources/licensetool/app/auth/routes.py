@@ -1,8 +1,10 @@
-from app.auth import bp
-from flask import session, redirect, request, url_for, current_app
-from msal import ConfidentialClientApplication
-import uuid
 import logging
+import uuid
+
+from flask import current_app, redirect, request, session, url_for
+from msal import ConfidentialClientApplication
+
+from app.auth import bp
 
 # --- Globale Werte ---
 REDIRECT_PATH = "callback"
@@ -55,7 +57,7 @@ def auth_callback():
             scopes=SCOPE,
             redirect_uri=url_for("auth.auth_callback", _external=True),
         )
-    except Exception as e:
+    except Exception:
         logger.exception("Fehler beim Abrufen des Tokens mit dem Autorisierungscode")
         return "Authentifizierungsfehler", 500
 

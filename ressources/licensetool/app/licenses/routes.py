@@ -1,17 +1,20 @@
-from apiflask import Schema
-from flask import render_template
-from app.extensions import db
-from app.licenses import bp
-from apiflask.fields import Integer as APIInteger, String as APIString
-from apiflask.validators import Length
-from app.models.license import LicenseModel, LicenseIn, LicenseOut, LicenseStatusOut, LicenseStatusAllOut
-from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
-from pathlib import Path
-from app.auth.utils import login_required
-from app.modules.sku_mapping import SKU_DISPLAY_NAMES
-import re
 import json
 import logging
+import re
+from pathlib import Path
+
+from apiflask import Schema
+from apiflask.fields import Integer as APIInteger
+from apiflask.fields import String as APIString
+from apiflask.validators import Length
+from flask import render_template
+
+from app.auth.utils import login_required
+from app.extensions import db
+from app.licenses import bp
+from app.models.license import LicenseIn, LicenseModel, LicenseOut, LicenseStatusAllOut, LicenseStatusOut
+from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
+from app.modules.sku_mapping import SKU_DISPLAY_NAMES
 
 # Logger definieren
 logger = logging.getLogger(__name__)
@@ -123,6 +126,7 @@ def get_license_status_tenant_show(tenant_name):
         client = GraphLicenseClient(tenant_name)
         data = client.get_license_status()
         tenant_display_name = config_data.get("tenant_name")
+        logger.info(f"Tenant Display Name: {tenant_display_name}")
 
         licenses = []
         for item in data.get("value", []):
@@ -142,7 +146,7 @@ def get_license_status_tenant_show(tenant_name):
         logger.info(f"{len(licenses)} Einträge für Tenant '{tenant_name}' geladen")
         return licenses
 
-    except Exception as e:
+    except Exception:
         logger.exception(f"Fehler beim Abrufen von Lizenzdaten für {tenant_name}")
         return []
 
@@ -193,7 +197,7 @@ def get_license_all_showfetch():
             SharePointClientTask.push_license_status_to_sharepoint(tenant_display_name, licenses)
             logger.info(f"Push an SharePoint abgeschlossen für Tenant: {tenant_display_name}")
 
-        except Exception as e:
+        except Exception:
             logger.exception(f"Fehler bei Tenant {tenant_id}")
             continue
 
@@ -237,6 +241,6 @@ def get_license_status_tenant_showfetch(tenant_name):
 
         return licenses
 
-    except Exception as e:
+    except Exception:
         logger.exception(f"Fehler beim Abrufen von Lizenzdaten für '{tenant_name}'")
         return []
