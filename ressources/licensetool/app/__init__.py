@@ -8,6 +8,7 @@ from app.extensions import db
 from app.modules.logging_config import setup_logging
 from config import Config
 
+
 def create_app(config_class=Config):
     setup_logging()  # Logging initialisieren
     app = APIFlask(__name__, docs_path='/api/v1/docs', template_folder='templates')
