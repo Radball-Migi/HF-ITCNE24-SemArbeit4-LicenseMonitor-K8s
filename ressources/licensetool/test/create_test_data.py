@@ -1,6 +1,7 @@
 from app.extensions import db
 from app.models.license import LicenseModel
 
+
 def create_test_data():
     db.drop_all()
     db.create_all()

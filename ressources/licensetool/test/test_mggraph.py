@@ -1,6 +1,9 @@
+import json
+from unittest.mock import MagicMock, mock_open, patch
+
 import pytest
-from unittest.mock import patch, mock_open, MagicMock
-from app.modules.mggraph import SharePointClientTask, GraphLicenseClient
+
+from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
 
 
 @pytest.fixture
@@ -12,6 +15,10 @@ def dummy_config():
         "cert_path": "dummy-cert.pem"
     }
 
+@patch("builtins.open", new_callable=mock_open, read_data="{invalid-json")
+def test_load_config_json_error(mock_open_file):
+    with pytest.raises(json.JSONDecodeError):
+        GraphLicenseClient("invalid")
 
 @patch("builtins.open", new_callable=mock_open, read_data='{"tenant_id": "dummy-tenant", "client_id": "dummy-client", "thumbprint": "thumb", "cert_path": "dummy-cert.pem"}')
 @patch("msal.ConfidentialClientApplication.acquire_token_for_client", return_value={"access_token": "dummy-token"})
@@ -38,8 +45,30 @@ def test_authentication_failure(mock_init, mock_token, mock_open_file):
     with pytest.raises(Exception, match="Token acquisition failed"):
         GraphLicenseClient("test-tenant")
 
-
-@patch("builtins.open", new_callable=mock_open, read_data='{"tenant_id": "dummy", "client_id": "dummy", "thumbprint": "dummy", "cert_path": "dummy.pem", "sharepoint_infos": {"site_id": "1", "license_list_id": "2", "tenant_list_id": "3", "field_mapping": {"Frei": "free", "Gebraucht": "used", "Verfügbar": "avail", "Infosup": "infosup", "Tenant": "Tenant", "Lizenzname": "Title"}, "tenant_field": "Tenant"}}')
+@patch(
+    "builtins.open",
+    new_callable=mock_open,
+    read_data=(
+        '{"tenant_id": "dummy", '
+        '"client_id": "dummy", '
+        '"thumbprint": "dummy", '
+        '"cert_path": "dummy.pem", '
+        '"sharepoint_infos": {'
+        '"site_id": "1", '
+        '"license_list_id": "2", '
+        '"tenant_list_id": "3", '
+        '"field_mapping": {'
+        '"Frei": "free", '
+        '"Gebraucht": "used", '
+        '"Verfügbar": "avail", '
+        '"Infosup": "infosup", '
+        '"Tenant": "Tenant", '
+        '"Lizenzname": "Title"'
+        '}, '
+        '"tenant_field": "Tenant"'
+        '}}'
+    ),
+)
 @patch("msal.ConfidentialClientApplication.acquire_token_for_client", return_value={"access_token": "dummy-token"})
 @patch("msal.ConfidentialClientApplication.__init__", return_value=None)
 @patch("requests.get")
@@ -61,7 +90,32 @@ def test_push_license_status_to_sharepoint(mock_post, mock_patch, mock_get, mock
     assert mock_post.called or mock_patch.called
 
 
-@patch("builtins.open", new_callable=mock_open, read_data='{"tenant_id": "dummy", "client_id": "dummy", "thumbprint": "dummy", "cert_path": "dummy.pem", "sharepoint_infos": {"site_id": "1", "license_list_id": "2", "tenant_list_id": "3", "field_mapping": {"Frei": "free", "Gebraucht": "used", "Verfügbar": "avail", "Infosup": "infosup", "Tenant": "Tenant", "Lizenzname": "Title"}, "tenant_field": "Tenant"}}')
+@patch(
+    "builtins.open",
+    new_callable=mock_open,
+    read_data=(
+        '{'
+        '"tenant_id": "dummy", '
+        '"client_id": "dummy", '
+        '"thumbprint": "dummy", '
+        '"cert_path": "dummy.pem", '
+        '"sharepoint_infos": {'
+            '"site_id": "1", '
+            '"license_list_id": "2", '
+            '"tenant_list_id": "3", '
+            '"field_mapping": {'
+                '"Frei": "free", '
+                '"Gebraucht": "used", '
+                '"Verfügbar": "avail", '
+                '"Infosup": "infosup", '
+                '"Tenant": "Tenant", '
+                '"Lizenzname": "Title"'
+            '}, '
+            '"tenant_field": "Tenant"'
+        '}'
+        '}'
+    ),
+)
 @patch("msal.ConfidentialClientApplication.acquire_token_for_client", return_value={"access_token": "dummy-token"})
 @patch("msal.ConfidentialClientApplication.__init__", return_value=None)
 @patch("requests.get")
@@ -130,9 +184,3 @@ def test_sharepoint_authentication_error(mock_token, mock_init, mock_open_file):
 def test_load_config_file_not_found(mock_open_file):
     with pytest.raises(FileNotFoundError):
         GraphLicenseClient("missing")
-
-
-@patch("builtins.open", new_callable=mock_open, read_data="{invalid-json")
-def test_load_config_json_error(mock_open_file):
-    with pytest.raises(Exception):
-        GraphLicenseClient("invalid")

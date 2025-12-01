@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
+from unittest.mock import mock_open, patch
+
 import pytest
-from unittest.mock import patch, mock_open
 
 
 def test_get_licenses(client):
