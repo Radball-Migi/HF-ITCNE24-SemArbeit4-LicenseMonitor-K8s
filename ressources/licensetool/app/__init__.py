@@ -4,9 +4,9 @@ from apiflask.fields import Integer, String
 from apiflask.validators import Length, OneOf
 
 # First-party
-from config import Config
 from app.extensions import db
 from app.modules.logging_config import setup_logging
+from config import Config
 
 def create_app(config_class=Config):
     setup_logging()  # Logging initialisieren
