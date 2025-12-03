@@ -8,6 +8,7 @@ on:
 
     paths:
       - 'ressources/licensetool/**'
+      - '.github/workflows/syntaxtests.yml'
 
 jobs:
   tests:
