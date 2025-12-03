@@ -3,11 +3,11 @@ import logging
 import re
 from pathlib import Path
 
-from apiflask import Schema
+from apiflask import APIBlueprint, Schema
 from apiflask.fields import Integer as APIInteger
 from apiflask.fields import String as APIString
 from apiflask.validators import Length
-from flask import Blueprint, render_template
+from flask import render_template
 
 from app.auth.utils import login_required
 from app.extensions import db
@@ -15,7 +15,7 @@ from app.models.license import LicenseIn, LicenseModel, LicenseOut, LicenseStatu
 from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
 from app.modules.sku_mapping import SKU_DISPLAY_NAMES
 
-bp = Blueprint("licenses", __name__, url_prefix="/licenses")
+bp = APIBlueprint("licenses", __name__, url_prefix="/licenses")
 
 # Logger definieren
 logger = logging.getLogger(__name__)

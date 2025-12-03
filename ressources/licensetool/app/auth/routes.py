@@ -1,10 +1,11 @@
 import logging
 import uuid
 
-from flask import Blueprint, current_app, redirect, request, session, url_for
+from apiflask import APIBlueprint
+from flask import current_app, redirect, request, session, url_for
 from msal import ConfidentialClientApplication
 
-bp = Blueprint("auth", __name__, url_prefix="/auth")
+bp = APIBlueprint("auth", __name__, url_prefix="/auth")
 
 # --- Globale Werte ---
 REDIRECT_PATH = "callback"
