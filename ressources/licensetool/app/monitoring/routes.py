@@ -7,12 +7,13 @@ from apiflask import Schema
 from apiflask.fields import Integer as APIInteger
 from apiflask.fields import String as APIString
 from apiflask.validators import Length
-from flask import Response, render_template, request
+from flask import Blueprint, Response, render_template, request
 
 from app.auth.utils import login_required
 from app.extensions import db
 from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
-from app.monitoring import bp
+
+bp = Blueprint("monitoring", __name__, url_prefix="/monitoring")
 
 logger = logging.getLogger(__name__)
 

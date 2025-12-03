@@ -1,7 +1,6 @@
-from flask import render_template
+from flask import Blueprint, render_template
 
-from app.main import bp
-
+bp = Blueprint("main", __name__)
 
 @bp.route('/')
 def show_frontend():
