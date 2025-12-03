@@ -44,5 +44,5 @@ jobs:
       - name: Run Integration Tests
         run: |
           pytest ${{ vars.WORKDIR }}/licensetool/test/. -v --tb=short
-          continue-on-error: false
+        continue-on-error: false
           
