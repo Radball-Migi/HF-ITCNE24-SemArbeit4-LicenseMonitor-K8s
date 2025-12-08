@@ -28,7 +28,7 @@ ARG AZDO_PAT
 
 RUN pip install --upgrade pip && \
     pip install \
-      --index-url "https://azdo:${secrets.AZDO_PAT}@pkgs.dev.azure.com/radballmigi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/_packaging/licensemonitor-dev/pypi/simple" \
+      --index-url "https://azdo:${AZDO_PAT}@pkgs.dev.azure.com/radballmigi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/_packaging/licensemonitor-dev/pypi/simple" \
       --extra-index-url "https://pypi.org/simple" \
       licensemonitor
 
