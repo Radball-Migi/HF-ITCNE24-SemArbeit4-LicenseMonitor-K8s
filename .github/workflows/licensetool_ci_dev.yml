@@ -160,7 +160,7 @@ jobs:
           chmod 600 ~/.pypirc
 
       - name: Publish to Azure DevOps
-        run: twine upload --repository azure dist/*
+        run: twine upload --repository azure dist/* --verbose
 
       # Paketname & Version aus dem Wheel-Namen lesen
       - name: Read package name & version from dist
