@@ -181,8 +181,8 @@ jobs:
           if len(parts) < 2:
               raise SystemExit(f"Cannot parse wheel filename: {wheel.name}")
 
-          name = parts[0]          # "licensemonitor"
-          version = parts[1]       # "1.0.0.dev5"
+          name = parts[0]
+          version = parts[1]
 
           # PEP 503 Normalisierung
           norm_name = name.replace("_", "-").lower()
@@ -194,7 +194,7 @@ jobs:
 
       - name: Verify install (from AZDO feed)
         env:
-          FEED: https://azdo:${{ secrets.AZDO_PAT }}@pkgs.dev.azure.com/${{ secrets.AZDO_ORG }}/${{ secrets.AZDO_PROJECT }}/_packaging/${{ secrets.AZDO_FEED_DEV }}/pypi/simple
+          FEED: https://azdo:${{ secrets.AZDO_PAT }}@pkgs.dev.azure.com/${{ vars.AZDO_ORG }}/${{ vars.AZDO_PROJECT }}/_packaging/${{ vars.AZDO_FEED_DEV }}/pypi/simple
         run: |
           python -m venv venv
           source venv/bin/activate
