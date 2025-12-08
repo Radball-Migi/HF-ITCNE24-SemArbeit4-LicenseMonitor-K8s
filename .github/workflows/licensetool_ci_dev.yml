@@ -218,8 +218,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: docker.io
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ vars.DH_USERNAME }}
+          password: ${{ secrets.DH_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -228,8 +228,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/licensemonitor-dev:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/licensemonitor-dev:${{ github.sha }}
+            docker.io/${{ vars.DH_USERNAME }}/licensemonitor-dev:latest
+            docker.io/${{ vars.DH_USERNAME }}/licensemonitor-dev:${{ github.sha }}
           build-args: |
             AZDO_PAT=${{ secrets.AZDO_PAT }}
 
