@@ -225,7 +225,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./${{ vars.WORKDIR }}/licensetool
-          file: ./dockerfile
+          file: ./${{ vars.WORKDIR }}/licensetool/dockerfile
           push: true
           tags: |
             docker.io/${{ vars.DH_USERNAME }}/licensemonitor-dev:latest
