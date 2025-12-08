@@ -153,7 +153,7 @@ jobs:
           index-servers = azure
 
           [azure]
-          repository: https://pkgs.dev.azure.com/${{ secrets.AZDO_ORG }}/${{ secrets.AZDO_PROJECT }}/_packaging/${{ secrets.AZDO_FEED_DEV }}/pypi/upload/
+          repository: https://pkgs.dev.azure.com/${{ secrets.AZDO_ORG }}/${{ vars.AZDO_PROJECT }}/_packaging/${{ vars.AZDO_FEED_DEV }}/pypi/upload/
           username: azdo
           password: ${{ secrets.AZDO_PAT }}
           EOF
