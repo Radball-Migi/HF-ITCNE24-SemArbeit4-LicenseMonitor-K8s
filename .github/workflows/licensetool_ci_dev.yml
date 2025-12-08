@@ -219,12 +219,12 @@ jobs:
         with:
           registry: docker.io
           username: ${{ vars.DH_USERNAME }}
-          password: ${{ secrets.DH_TOKEN }}
+          password: ${{ secrets.DH_PAT }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./${{ vars.WORKDIR }}/licensetool
           file: ./Dockerfile
           push: true
           tags: |
