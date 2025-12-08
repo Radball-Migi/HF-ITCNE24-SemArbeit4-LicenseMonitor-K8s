@@ -204,3 +204,32 @@ jobs:
             --index-url "$FEED" \
             --extra-index-url https://pypi.org/simple \
             "${{ steps.pkginfo.outputs.name }}==${{ steps.pkginfo.outputs.version }}"
+
+  docker_build_push_dockerhub:
+    name: Build & Push Docker Image (Docker Hub DEV)
+    runs-on: ubuntu-latest
+    needs: publish   # läuft NACH dem Publish ins ADO PyPI-Feed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/licensemonitor-dev:latest
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/licensemonitor-dev:${{ github.sha }}
+          build-args: |
+            AZDO_PAT=${{ secrets.AZDO_PAT }}
+
