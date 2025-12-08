@@ -1,4 +1,4 @@
-name: Test, Build and Publish
+name: Test, Build and Publish DEV
 
 on:
   push:
@@ -46,11 +46,12 @@ jobs:
         run: |
           pytest ${{ vars.WORKDIR }}/licensetool/test/. -v --tb=short
         continue-on-error: false
-
+  
   build:
-    name: Build Package (Artifact only)
+    name: Build Package (Artifact only, dev version)
     runs-on: ubuntu-latest
     needs: tests
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -69,6 +70,38 @@ jobs:
           pip install -r ${{ vars.WORKDIR }}/licensetool/requirements.txt
           pip install build
 
+      # automatische DEV-Version: <base>.dev<GITHUB_RUN_NUMBER>
+      - name: Set dev version in pyproject.toml
+        working-directory: ${{ vars.WORKDIR }}/licensetool
+        run: |
+          python - << 'PY'
+          from pathlib import Path
+          import os, re
+
+          run_number = os.environ["GITHUB_RUN_NUMBER"]
+          path = Path("pyproject.toml")
+          text = path.read_text(encoding="utf-8")
+
+          def repl(m):
+              base = m.group(1)
+              # vorhandenes .dev abschneiden, falls schon drin
+              base = base.split(".dev")[0]
+              return f'version = "{base}.dev{run_number}"'
+
+          new_text, count = re.subn(
+              r'^version\s*=\s*"([^"]+)"',
+              repl,
+              text,
+              count=1,
+              flags=re.MULTILINE,
+          )
+
+          if count == 0:
+              raise SystemExit("Keine 'version = \"...\"'-Zeile in pyproject.toml gefunden.")
+
+          path.write_text(new_text, encoding="utf-8")
+          PY
+
       - name: Build package (sdist + wheel)
         working-directory: ${{ vars.WORKDIR }}/licensetool
         run: python -m build
@@ -78,3 +111,89 @@ jobs:
         with:
           name: licensetool-dist
           path: ${{ vars.WORKDIR }}/licensetool/dist/*
+
+  publish:
+    name: Publish_2_AZDO_Feed_DEV
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: licensetool-dist
+          path: dist
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Optional: Debug-Verzeichnis
+      - name: Debug working directory contents
+        run: |
+          echo "📂 Current working directory: $(pwd)"
+          echo "📄 Inhalt:"
+          ls -la
+          echo "📂 dist Inhalt:"
+          ls -la dist
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install twine
+
+      - name: Configure .pypirc
+        run: |
+          cat > ~/.pypirc <<EOF
+          [distutils]
+          index-servers = azure
+
+          [azure]
+          repository: https://pkgs.dev.azure.com/${{ secrets.AZDO_ORG }}/${{ secrets.AZDO_PROJECT }}/_packaging/${{ secrets.AZDO_FEED_DEV }}/pypi/upload/
+          username: azdo
+          password: ${{ secrets.AZDO_PAT }}
+          EOF
+          chmod 600 ~/.pypirc
+
+      - name: Publish to Azure DevOps
+        run: twine upload --repository azure dist/*
+
+      # Paketname & Version aus dem Wheel-Namen lesen
+      - name: Read package name & version from dist
+        id: pkginfo
+        run: |
+          python - << 'PY'
+          import os, re, pathlib
+
+          dist = pathlib.Path("dist")
+          wheels = list(dist.glob("*.whl"))
+          if not wheels:
+              raise SystemExit("No wheel file found in dist/")
+          wheel = wheels[0].name
+          # Beispiel: mypackage-0.1.0.dev5-py3-none-any.whl
+          m = re.match(r"(?P<name>.+)-(?P<version>[^-]+)-", wheel)
+          if not m:
+              raise SystemExit(f"Cannot parse wheel filename: {wheel}")
+          name = m.group("name").replace("_", "-").lower()
+          version = m.group("version")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as g:
+              g.write(f"name={name}\n")
+              g.write(f"version={version}\n")
+          PY
+
+      - name: Verify install (from AZDO feed)
+        env:
+          FEED: https://azdo:${{ secrets.AZDO_PAT }}@pkgs.dev.azure.com/${{ secrets.AZDO_ORG }}/${{ secrets.AZDO_PROJECT }}/_packaging/${{ secrets.AZDO_FEED_DEV }}/pypi/simple
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          echo "Installing ${{ steps.pkginfo.outputs.name }}==${{ steps.pkginfo.outputs.version }}"
+          pip install \
+            --index-url "$FEED" \
+            --extra-index-url https://pypi.org/simple \
+            "${{ steps.pkginfo.outputs.name }}==${{ steps.pkginfo.outputs.version }}"
