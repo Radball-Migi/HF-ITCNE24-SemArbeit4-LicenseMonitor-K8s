@@ -167,21 +167,28 @@ jobs:
         id: pkginfo
         run: |
           python - << 'PY'
-          import os, re, pathlib
+          import os
+          from pathlib import Path
 
-          dist = pathlib.Path("dist")
+          dist = Path("dist")
           wheels = list(dist.glob("*.whl"))
           if not wheels:
               raise SystemExit("No wheel file found in dist/")
-          wheel = wheels[0].name
-          # Beispiel: mypackage-0.1.0.dev5-py3-none-any.whl
-          m = re.match(r"(?P<name>.+)-(?P<version>[^-]+)-", wheel)
-          if not m:
-              raise SystemExit(f"Cannot parse wheel filename: {wheel}")
-          name = m.group("name").replace("_", "-").lower()
-          version = m.group("version")
+          wheel = wheels[0]
+          stem = wheel.stem  # z.B. "licensemonitor-1.0.0.dev5-py3-none-any"
+
+          parts = stem.split("-")
+          if len(parts) < 2:
+              raise SystemExit(f"Cannot parse wheel filename: {wheel.name}")
+
+          name = parts[0]          # "licensemonitor"
+          version = parts[1]       # "1.0.0.dev5"
+
+          # PEP 503 Normalisierung
+          norm_name = name.replace("_", "-").lower()
+
           with open(os.environ["GITHUB_OUTPUT"], "a") as g:
-              g.write(f"name={name}\n")
+              g.write(f"name={norm_name}\n")
               g.write(f"version={version}\n")
           PY
 
