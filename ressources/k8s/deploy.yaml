@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: licensetool
-  namespace: prod
+  namespace: default
   labels:
     app: licensetool
 spec:
@@ -25,7 +25,7 @@ spec:
         - name: regcred
       containers:
         - name: licensetool
-          image: docker.io/radballmigi/k8s:licensetool
+          image: docker.io/radballmigi/licensemonitor-dev:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

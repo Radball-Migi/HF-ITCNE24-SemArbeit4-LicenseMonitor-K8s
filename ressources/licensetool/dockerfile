@@ -33,5 +33,5 @@ RUN pip install --upgrade pip && \
       licensemonitor
 
 EXPOSE 5000
-CMD ["python", "-m", "licensemonitor"]   # ggf. an deine Startlogik anpassen
+CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 
