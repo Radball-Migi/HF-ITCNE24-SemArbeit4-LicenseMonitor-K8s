@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+
 def load_sku_mapping():
     mapping_path = Path("config/sku_mappings.json")
     if not mapping_path.exists():
