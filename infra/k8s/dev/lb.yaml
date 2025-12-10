@@ -3,15 +3,12 @@ kind: Service
 metadata:
   name: licensetool
   namespace: default
-  labels:
-    app: licensetool
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: licensetool
   ports:
     - name: http
-      port: 80
-      targetPort: http   # verweist auf containerPort:5000 (per Name)
+      port: 5000        # EXTERNER Port
+      targetPort: 5000  # Port im Container (Flask)
       protocol: TCP
-      nodePort: 30080
