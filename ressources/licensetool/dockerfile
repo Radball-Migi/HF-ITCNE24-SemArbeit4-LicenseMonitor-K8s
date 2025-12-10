@@ -1,37 +1,16 @@
-# # Base python package
-# FROM python:3.13.2
+# Base python package
+FROM python:3.13.2
 
-# # Working directory
-# WORKDIR /app
-
-# # Copy the dependencies
-# COPY requirements.txt requirements.txt
-
-# # Install the dependencies
-# RUN pip install -r requirements.txt
-
-# COPY . .
-
-# # Executable commands
-# CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
-
-
-FROM python:3.11-slim
-
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PIP_NO_CACHE_DIR=1
-
+# Working directory
 WORKDIR /app
 
-ARG AZDO_PAT
+# Copy the dependencies
+COPY requirements.txt requirements.txt
 
-RUN pip install --upgrade pip && \
-    pip install \
-      --index-url "https://azdo:${AZDO_PAT}@pkgs.dev.azure.com/radballmigi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/_packaging/licensemonitor-dev/pypi/simple" \
-      --extra-index-url "https://pypi.org/simple" \
-      licensemonitor
+# Install the dependencies
+RUN pip install -r requirements.txt
 
-EXPOSE 5000
-CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+COPY . .
 
+# Executable commands
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
