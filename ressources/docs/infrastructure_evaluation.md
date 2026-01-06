@@ -67,20 +67,21 @@ Keine Auslandsdatenströme, keine zusätzlichen Garantien, kein Cloud Act Risiko
 Gewichtung orientiert sich an den Projektanforderungen:  
 Security & Datenschutz stehen im Vordergrund.
 
-| **Kriterium**        | **Gewicht** | **Azure** | **AWS** | **Lokal** |
-| -------------------- | ----------- | --------- | ------- | --------- |
-| Datenschutz / DSG    | **35%**     | Mittel    | Niedrig | ⭐ Hoch    |
-| Security             | **25%**     | Mittel    | Mittel  | ⭐ Hoch    |
-| Cost                 | 10%         | Mittel    | Niedrig | Mittel    |
-| Scalability          | 10%         | Hoch      | Hoch    | Niedrig   |
-| Operational Control  | 10%         | Niedrig   | Niedrig | ⭐ Hoch    |
-| Integration MS Graph | 10%         | Hoch      | Mittel  | Niedrig   |
 
-### **Punkte (0–10):**
+| **Kriterium**        | **Gewicht** | **Azure**   | **AWS**     | **Lokal**   |
+| -------------------- | ----------- | ----------- | ----------- | ----------- |
+| Datenschutz / DSG    | **35%**     | Mittel (6)  | Niedrig (4) | ⭐ Hoch (9)  |
+| Security             | **25%**     | Mittel (7)  | Mittel (7)  | ⭐ Hoch (9)  |
+| Kosten               | 10%         | Mittel (6)  | Niedrig (5) | Mittel (6)  |
+| Scalability          | 10%         | Hoch (9)    | Hoch (10)   | Niedrig (4) |
+| Operational Control  | 10%         | Niedrig (5) | Niedrig (5) | ⭐ Hoch (9)  |
+| Integration MS Graph | 10%         | Hoch (9)    | Mittel (7)  | Niedrig (4) |
 
-- **Azure:** 5.8
-- **AWS:** 5.1
-- ⭐ **Lokal:** 8.1
+**Gesamtpunktzahl (0–10):**
+
+- Azure: **6.75**
+- AWS: **5.85**
+- ⭐**Lokal: 7.70**
 
 ---
 
