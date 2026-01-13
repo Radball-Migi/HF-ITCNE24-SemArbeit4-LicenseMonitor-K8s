@@ -8,10 +8,13 @@ from app.extensions import db
 from app.modules.logging_config import setup_logging
 from config import Config
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 
 def create_app(config_class=Config):
     setup_logging()  # Logging initialisieren
     app = APIFlask(__name__, docs_path='/api/v1/docs', template_folder='templates')
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
     app.config.from_object(config_class)
 
     db.init_app(app)
