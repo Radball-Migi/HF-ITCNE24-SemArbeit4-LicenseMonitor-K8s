@@ -2,13 +2,12 @@
 from apiflask import APIFlask, Schema
 from apiflask.fields import Integer, String
 from apiflask.validators import Length, OneOf
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # First-party
 from app.extensions import db
 from app.modules.logging_config import setup_logging
 from config import Config
-
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 def create_app(config_class=Config):
