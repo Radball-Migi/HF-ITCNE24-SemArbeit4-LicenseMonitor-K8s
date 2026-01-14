@@ -1,6 +1,5 @@
-from test import client
-from unittest.mock import patch
 import json
+from unittest.mock import patch
 
 
 @patch("app.monitoring.routes.render_template")

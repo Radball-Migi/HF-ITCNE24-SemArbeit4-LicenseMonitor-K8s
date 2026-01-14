@@ -1,0 +1,1 @@
+kubectl apply --server-side --force-conflicts -n "argocd" -f "C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s\infra\k8s\dev\yaml-files\deploy_argocd.yaml"
