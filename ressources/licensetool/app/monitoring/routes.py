@@ -1,19 +1,15 @@
+from apiflask import Schema
+from flask import render_template, request, Response
+from app.extensions import db
+from app.monitoring import bp
+from apiflask.fields import Integer as APIInteger, String as APIString
+from apiflask.validators import Length
+from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
+from pathlib import Path
+from app.auth.utils import login_required
+import re
 import json
 import logging
-import re
-from pathlib import Path
-
-from apiflask import APIBlueprint, Schema
-from apiflask.fields import Integer as APIInteger
-from apiflask.fields import String as APIString
-from apiflask.validators import Length
-from flask import Response, render_template, request
-
-from app.auth.utils import login_required
-from app.extensions import db
-from app.modules.mggraph import GraphLicenseClient, SharePointClientTask
-
-bp = APIBlueprint("monitoring", __name__, url_prefix="/monitoring")
 
 logger = logging.getLogger(__name__)
 

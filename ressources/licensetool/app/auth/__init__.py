@@ -1,1 +1,5 @@
-from app.auth.routes import bp
+from apiflask import APIBlueprint
+
+bp = APIBlueprint('auth', __name__)
+
+from app.auth import routes

@@ -14,7 +14,6 @@ ressources/scripts/Logininfos_local.json
 ressources/licensetool/config-profiles
 ressources/licensetool/.env
 ressources/licensetool/certs
-infra/k8s/dev/certs/tls
 
 # Ignore all __pycache__ folders
 ressources/licensetool/__pycache__
