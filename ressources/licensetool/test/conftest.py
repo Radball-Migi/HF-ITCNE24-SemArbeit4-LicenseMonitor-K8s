@@ -1,10 +1,8 @@
 import pytest
-
 from app import create_app
 from app.extensions import db as _db
-from config import TestingConfig
 from test.create_test_data import create_test_data
-
+from config import TestingConfig
 
 @pytest.fixture(scope='session')
 def app():
