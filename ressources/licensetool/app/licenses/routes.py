@@ -118,7 +118,7 @@ def get_license_show_all():
 @login_required
 def get_license_status_tenant_show(tenant_name):
     try:
-        config_file = f"config-profiles/config-{tenant_name}-profile.json"
+        config_file = f"config-profiles/tenants/config-{tenant_name}-profile.json"
         logger.info(f"Lade Lizenzstatus für Tenant '{tenant_name}'")
 
         with open(config_file, "r") as f:
@@ -210,7 +210,7 @@ def get_license_all_showfetch():
 @login_required
 def get_license_status_tenant_showfetch(tenant_name):
     try:
-        config_file = f"config-profiles/config-{tenant_name}-profile.json"
+        config_file = f"config-profiles/tenants/config-{tenant_name}-profile.json"
         logger.info(f"Lade Konfiguration für Tenant: {tenant_name}")
 
         with open(config_file, "r") as f:

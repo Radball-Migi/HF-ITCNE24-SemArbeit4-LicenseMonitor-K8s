@@ -17,7 +17,7 @@ class GraphLicenseClient:
         self.token = self._authenticate()
 
     def _load_config(self):
-        config_file = f"config-profiles/tennants/config-{self.tenant_name}-profile.json"
+        config_file = f"config-profiles/tenants/config-{self.tenant_name}-profile.json"
         with open(config_file, "r") as f:
             return json.load(f)
 
