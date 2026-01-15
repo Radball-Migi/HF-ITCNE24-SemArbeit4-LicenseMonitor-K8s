@@ -156,7 +156,7 @@ def get_license_status_tenant_show(tenant_name):
 @login_required
 def get_license_all_showfetch():
     logger.info("Starte Fetch und Push für alle Tenants (status/show-fetch)")
-    config_path = Path("config-profiles")
+    config_path = Path("config-profiles/tenants")
     statusall = []
 
     for config_file in config_path.glob("config-*-profile.json"):
