@@ -69,7 +69,7 @@ def create_license(json_data):
 @login_required
 def get_license_show_all():
     logger.info("Alle Lizenzstatus werden geladen (status/show)")
-    config_path = Path("config-profiles")
+    config_path = Path("config-profiles/tenants")
     statusall = []
 
     for config_file in config_path.glob("config-*-profile.json"):

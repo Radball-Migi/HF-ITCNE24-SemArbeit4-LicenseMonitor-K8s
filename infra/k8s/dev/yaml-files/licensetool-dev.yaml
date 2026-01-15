@@ -33,7 +33,7 @@ spec:
             secretName: licensetool-profiles-sharepoint
         - name: profiles-tennants
           secret:
-            secretName: licensetool-profiles-tennants
+            secretName: licensetool-profiles-tenants
         # - name: certs
         #   secret:
         #     secretName: licensetool-certs
@@ -70,7 +70,7 @@ spec:
               mountPath: /app/config-profiles/sharepoint
               readOnly: true
             - name: profiles-tennants
-              mountPath: /app/config-profiles/tennants
+              mountPath: /app/config-profiles/tenants
               readOnly: true
             # - name: certs
             #   mountPath: /app/certs
