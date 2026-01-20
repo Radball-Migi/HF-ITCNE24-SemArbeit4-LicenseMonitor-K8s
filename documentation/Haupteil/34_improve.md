@@ -209,9 +209,11 @@ Nach Abschluss der Improve-Phase läuft die Applikation stabil in der Minikube-U
 
 
 
+## Secrets management
 
-
-
+Zur sicheren Verwaltung von sensiblen Konfigurationsdaten (z. B. Zertifikate, Zugangsdaten) wird das Sealed-Secrets-Konzept eingesetzt.  
+Dabei werden Secrets clientseitig mit dem öffentlichen Schlüssel des Clusters verschlüsselt und als sogenannte SealedSecrets im Git-Repository versioniert.  
+Die Entschlüsselung erfolgt ausschliesslich im Kubernetes-Cluster durch den Sealed-Secrets-Controller, wodurch sichergestellt ist, dass zu keinem Zeitpunkt Klartext-Secrets im Repository abgelegt werden.
 
 
 
