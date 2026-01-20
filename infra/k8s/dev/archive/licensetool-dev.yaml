@@ -48,3 +48,18 @@ spec:
       targetPort: http   # verweist auf containerPort:5000 (per Name)
       # protocol: TCP
       # nodePort: 30080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: licensetool-lb
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: licensetool
+  ports:
+    - name: http
+      port: 5000        # EXTERNER Port
+      targetPort: 5000  # Port im Container (Flask)
+      protocol: TCP
