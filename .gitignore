@@ -31,6 +31,10 @@ ressources/licensetool/app/monitoring/__pycache__
 vendor/
 
 # Ignore files of secret nature
-infra/k8s/dev/create-secrets.ps1
-infra/k8s/dev/create_tls_self-signed-cert.ps1
+infra/k8s/dev/ps/create-secrets.ps1
+infra/k8s/dev/ps/create-sealed-secrets.ps1
+infra/k8s/dev/ps/create_tls_self-signed-cert.ps1
 infra/k8s/dev/certs/tls
+infra/k8s/dev/certs/sealed-secrets/sealed-secrets-cert.pem
+
+
