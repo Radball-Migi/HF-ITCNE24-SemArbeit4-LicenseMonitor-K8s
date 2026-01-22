@@ -2,24 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: licensetool
-  labels:
-    app: licensetool
 spec:
-  replicas: 3
-  revisionHistoryLimit: 5
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
-  selector:
-    matchLabels:
-      app: licensetool
   template:
-    metadata:
-      labels:
-        app: licensetool
     spec:
+      imagePullSecrets:
+        - name: regcred
       volumes:
         - name: profiles-auth
           secret:
@@ -42,14 +29,9 @@ spec:
         - name: licensetool-cert-flask-service-iseapp-1588
           secret:
             secretName: licensetool-cert-flask-service-iseapp-1588
-
       containers:
         - name: licensetool
           image: docker.io/radballmigi/licensemonitor-dev:latest
-          imagePullPolicy: Always
-          ports:
-            - name: http
-              containerPort: 5000
           envFrom:
             - secretRef:
                 name: licensetool-env
