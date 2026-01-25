@@ -9,4 +9,5 @@ Für Semesterarbeit, nur via Powershell verfügbar, im Moment (Stand 19.11.2025)
 | `minikube addons list`              | handling | Zeigt alle installierten addons an                                  |
 | `minikube profile semar4-dev`       | handling | Profil/Cluster wählen und setzen                                    |
 | `minikube dashboard`                | handling | Startet das dashboard (GUI) von Minikube                            |
-|                                     |          |                                                                     |
+| minikube tunnel                     | network  | Startet den Loadbalancer/Ingress                                    |
+| minikube ip                         | network  | zeigt die Cluster IP an.                                            |

@@ -36,3 +36,5 @@ infra/k8s/dev/ps/create-secrets.ps1
 infra/k8s/scripts/dev/create-secrets.ps1
 infra/k8s/scripts/dev/create-sealed-secrets.ps1
 infra/k8s/scripts/dev/create_tls_self-signed-cert.ps1
+
+

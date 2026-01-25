@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: licensetool
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: profiles-auth
+          secret:
+            secretName: licensetool-profiles-auth
+        - name: profiles-sharepoint
+          secret:
+            secretName: licensetool-profiles-sharepoint
+        - name: profiles-tenants
+          secret:
+            secretName: licensetool-profiles-tenants
+        - name: certs-infos
+          secret:
+            secretName: licensetool-cert-infos
+        - name: licensetool-cert-iseschool
+          secret:
+            secretName: licensetool-cert-iseschool
+        - name: licensetool-cert-iseschool2013
+          secret:
+            secretName: licensetool-cert-iseschool2013
+        - name: licensetool-cert-flask-service-iseapp-1588
+          secret:
+            secretName: licensetool-cert-flask-service-iseapp-1588
+      containers:
+        - name: licensetool
+          image: docker.io/radballmigi/licensemonitor-dev:latest
+          envFrom:
+            - secretRef:
+                name: licensetool-env
+          volumeMounts:
+            - name: profiles-auth
+              mountPath: /app/config-profiles/auth
+              readOnly: true
+            - name: profiles-sharepoint
+              mountPath: /app/config-profiles/sharepoint
+              readOnly: true
+            - name: profiles-tenants
+              mountPath: /app/config-profiles/tenants
+              readOnly: true
+            - name: certs-infos
+              mountPath: /app/certs/infos
+              readOnly: true
+            - name: licensetool-cert-iseschool
+              mountPath: /app/certs/iseschool
+              readOnly: true
+            - name: licensetool-cert-iseschool2013
+              mountPath: /app/certs/iseschool2013
+              readOnly: true
+            - name: licensetool-cert-flask-service-iseapp-1588
+              mountPath: /app/certs/flask-service-iseapp-1588
+              readOnly: true

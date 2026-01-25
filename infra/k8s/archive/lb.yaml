@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: licensetool
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: licensetool
+  ports:
+    - name: http
+      port: 5000        # EXTERNER Port
+      targetPort: 5000  # Port im Container (Flask)
+      protocol: TCP
+
+
+
+
+
+
+
+
+
+
+# lb aus alg. File:
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: licensetool-lb
+#   namespace: default
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: licensetool
+#   ports:
+#     - name: http
+#       port: 5000        # EXTERNER Port
+#       targetPort: 5000  # Port im Container (Flask)
+#       protocol: TCP
