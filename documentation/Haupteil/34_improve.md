@@ -171,7 +171,16 @@ infra/
 		└── licensetool/             
 			└── overlays/                 
 				└── dev/                     
-					└── sealed-secret.yaml
+					licensetool-cert-flask-service-iseapp-1588.sealedsecret.yaml
+					licensetool-cert-infos.sealedsecret.yaml
+					licensetool-cert-iseschool.sealedsecret.yaml
+					licensetool-cert-iseschool2013.sealedsecret.yaml
+					licensetool-env.sealedsecret.yaml
+					licensetool-profiles-auth.sealedsecret.yaml
+					licensetool-profiles-sharepoint.sealedsecret.yaml
+					licensetool-profiles-tenants.sealedsecret.yaml
+					licensetool-tls.sealedsecret.yaml
+					regcred.sealedsecret.yaml
 ```
 _Dateistruktur der Sealed Secrets_
 
@@ -203,10 +212,6 @@ Die Wirksamkeit dieser Massnahmen wurde iterativ überprüft durch:
 - Validierung gemounteter Dateien
 - Funktionstests der Microsoft- und SharePoint-Integrationen
 
-📌 **Hier CLI-Ausgabe einfügen:**  
-`kubectl exec … ls /app/certs`  
-`kubectl logs licensetool-pod`
-
 Nach diesen Anpassungen lief die Applikation stabil mit mehreren Replikas.
 
 ---
@@ -215,18 +220,11 @@ Nach diesen Anpassungen lief die Applikation stabil mit mehreren Replikas.
 
 Während der GitOps-Einführung trat ein kritischer Fehler auf:
 
-> _Failed to load target state: connection refused (argocd-repo-server)_
+`Failed to load target state: connection refused (argocd-repo-server)`
 
 Die Ursache lag in einem inkonsistenten Zustand des Argo CD Repo Servers. Ein gezielter Neustart des Deployments stellte die Kommunikation wieder her.
 
-📌 **Hier CLI-Ausgabe einfügen:**  
-`kubectl -n argocd get pods`  
-`kubectl -n argocd rollout restart deploy/argocd-repo-server`
-
-📌 **Hier Screenshot einfügen:**  
-_Argo CD – Application Status: Healthy / Synced_
-
-Dieser Schritt wurde dokumentiert und als Bestandteil des Troubleshooting-Wissens festgehalten.
+Damit dies nicht währen des Bootstraps für Probleme sorgt, wurde dies im Startup-Script mit eingebaut, dass der Repo-Server nach dem starten des Ingress Tunnels einen redeploy macht.  
 
 ---
 

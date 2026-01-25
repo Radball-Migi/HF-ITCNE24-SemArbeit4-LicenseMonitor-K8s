@@ -1,4 +1,4 @@
-name: Test, Build and Publish DEV
+name: Test, Build and Publish DEV - Test Pub
 
 on:
   push:
