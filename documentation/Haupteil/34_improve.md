@@ -64,174 +64,187 @@ Durch Minikube kann die Zielarchitektur praxisnah umgesetzt werden, ohne die im 
 
 ---
 
-## Einordnung der Improve-Phase
+## Evaluation und Festlegung der Infrastruktur
 
-Die Analyse hat gezeigt, dass die bestehenden Probleme primär im Bereich **Deployment**, **Automatisierung** und **Betrieb** liegen. Entsprechend adressiert die Improve-Phase genau diese Punkte:
+Zu Beginn der Improve-Phase wurde die in der Analyze-Phase begonnene Infrastruktur-Evaluation konkretisiert. Dabei wurden sowohl **Cloud-basierte Lösungen** als auch eine **lokale Kubernetes-Umgebung** betrachtet. Entscheidende Bewertungskriterien waren unter anderem Datenschutz, Kontrolle über sensible Lizenzdaten, technische Komplexität sowie Kosten- und Betriebsaspekte.
 
-- Reduktion manueller Schritte im Build- und Deployment-Prozess
-- Einführung einer cloud-nativen Laufzeitumgebung
-- Automatisierte Bereitstellung der Anwendung
-- Klare Trennung von Code, Konfiguration und Infrastruktur
+Das Ergebnis dieser Evaluation war die bewusste Entscheidung für eine **lokale Kubernetes-Umgebung auf Basis von Minikube**. Diese Lösung ermöglicht ein realistisches Cloud-Native-Setup, ohne Abhängigkeiten von externen Cloud-Anbietern einzugehen. Gleichzeitig bleibt die Architektur so gestaltet, dass ein späterer Wechsel in eine Cloud-Umgebung grundsätzlich möglich wäre.
 
-Die folgenden Abschnitte beschreiben die schrittweise Umsetzung dieser Verbesserungsmassnahmen.
+| **Kriterium**        | **Gewicht** | **Azure**   | **AWS**     | **Lokal**   |
+| -------------------- | ----------- | ----------- | ----------- | ----------- |
+| Datenschutz / DSG    | **35%**     | Mittel (6)  | Niedrig (4) | ⭐ Hoch (9)  |
+| Security             | **25%**     | Mittel (7)  | Mittel (7)  | ⭐ Hoch (9)  |
+| Kosten               | 10%         | Mittel (6)  | Niedrig (5) | Mittel (6)  |
+| Scalability          | 10%         | Hoch (9)    | Hoch (10)   | Niedrig (4) |
+| Operational Control  | 10%         | Niedrig (5) | Niedrig (5) | ⭐ Hoch (9)  |
+| Integration MS Graph | 10%         | Hoch (9)    | Mittel (7)  | Niedrig (4) |
+_Gewichtete Entscheidungsmatrix, mehr details zur Evaluation unter [Vergleich der Deployment-Optionen](./33_analyze#vergleich-der-deployment-optionen)_
 
----
+**Gesamtpunktzahl (0–10):**
 
-## Überblick über die umgesetzten Verbesserungen
+- Azure: **6.75**
+- AWS: **5.85**
+- ⭐ **Lokal: 7.70**
 
-Zur besseren Orientierung ist die Improve-Phase in mehrere logisch aufeinander aufbauende Abschnitte gegliedert. Die nachfolgende Übersicht zeigt die einzelnen Themenbereiche sowie deren Zielsetzung.
-
-| Abschnitt                               | Beschreibung                                                                          | GitHub-Issue |
-| --------------------------------------- | ------------------------------------------------------------------------------------- | ------------ |
-| [Zielinfrastruktur](#Zielinfrastruktur) | Beschreibung der gewählten Infrastruktur und Architektur (lokale Kubernetes-Umgebung) |              |
-| Cloud-Native-Core-Konzept               | Einordnung der Architekturprinzipien und deren Anwendung im Projekt                   |              |
-| Containerisierung der Anwendung         | Anpassungen zur Bereitstellung der bestehenden Applikation als Container-Image        |              |
-| CI-Pipeline (Build)                     | Automatisierter Build-Prozess inkl. Versionierung und Image-Erstellung                |              |
-| CD / GitOps-Ansatz                      | Deployment der Anwendung mittels GitOps-Prinzipien                                    |              |
-| Kubernetes-Deployment                   | Deployment der Anwendung in der Kubernetes-Umgebung                                   |              |
-| Code- & Konfigurationsanpassungen       | Notwendige Anpassungen am bestehenden Code für den Betrieb in Kubernetes              |              |
-| Aufbau der Testumgebung                 | Beschreibung und Aufbau der Entwicklungs- und Laufzeitumgebungen                      |              |
-
-Diese Struktur ermöglicht es, die Verbesserungsmassnahmen nachvollziehbar vom konzeptionellen Ansatz bis zur technischen Umsetzung darzustellen.
+Mit dieser Entscheidung wurde eine stabile und datenschutzkonforme Grundlage geschaffen, auf der alle weiteren Verbesserungen aufbauen.
 
 ---
 
-## Zielinfrastruktur
+## Weiterentwicklung zur Cloud-Native-Core-Architektur
 
-Basierend auf der Infrastruktur-Evaluation in der Analyze-Phase wurde eine **lokale Kubernetes-Umgebung** als Zielinfrastruktur gewählt. Diese Entscheidung berücksichtigt sowohl technische als auch regulatorische Anforderungen, insbesondere im Hinblick auf Datenschutz und Kontrolle sensibler Lizenzdaten.
+Basierend auf der gewählten Zielinfrastruktur wurde das bestehende Lizenzüberwachungstool konsequent in Richtung einer **Cloud-Native-Core-Architektur** weiterentwickelt. Dabei standen nicht einzelne Technologien im Vordergrund, sondern zentrale Architektur- und Betriebsprinzipien.
 
-Die Zielinfrastruktur bildet die Grundlage für alle weiteren Verbesserungen und orientiert sich an realistischen Produktionsszenarien, ohne dabei Abhängigkeiten von Cloud-Anbietern einzugehen.
+Umgesetzte Kernprinzipien waren unter anderem:
 
+- Containerisierung der bestehenden Anwendung
+- Trennung von Anwendungscode, Konfiguration und Infrastruktur
+- Deklarative Beschreibung des gewünschten Systemzustands
+- Stateless-Betrieb der Applikation
 
+Die Anwendung wurde als Container-Image bereitgestellt, ohne die fachliche Logik zu verändern. Durch diese Entkopplung ist die Applikation unabhängig von der Laufzeitumgebung und eignet sich für automatisierte Deployments und Skalierung innerhalb von Kubernetes.
 
-
-## Cloud-Native-Core-Konzept
-
-Die Umsetzung folgt den Prinzipien einer Cloud-Native-Core-Architektur. Diese beschreibt keinen einzelnen Technologie-Stack, sondern eine Sammlung von Architektur- und Betriebsprinzipien, welche einen stabilen und skalierbaren Betrieb ermöglichen.
-
-Zentrale Prinzipien im Projekt sind unter anderem:
-- Containerisierung der Anwendung
-- Deklarative Infrastrukturdefinition
-- Automatisierte Deployments
-- Trennung von Anwendung, Konfiguration und Laufzeit
-
-
+![aufbau](../../ressources/images/zielarchitektur.png)
+_Zielarchitektur_
 
 ---
 
-## Containerisierung der bestehenden Anwendung
+## Aufbau einer CI/CD-Pipeline (Build & Artefakt-Erstellung)
 
-Die bestehende Applikation wird für den Betrieb in Kubernetes als Container-Image bereitgestellt. Dazu sind gezielte Anpassungen erforderlich, ohne die fachliche Logik der Anwendung zu verändern.
+Ein zentrales Ziel der Improve-Phase war die **Reduktion manueller Schritte** im Build- und Bereitstellungsprozess. Dazu wurde eine CI-Pipeline aufgebaut, welche Änderungen am Quellcode automatisch verarbeitet.
 
-Ziel ist es, die Anwendung unabhängig von der Laufzeitumgebung betreiben zu können und eine konsistente Basis für automatisierte Deployments zu schaffen.
+Die Pipeline übernimmt unter anderem:
 
+- Build der Applikation
+- Erstellung eines versionierten Container-Images
+- Bereitstellung des Artefakts für das Deployment
 
+Dadurch ist jeder Build eindeutig einer Code-Version zugeordnet und reproduzierbar. Fehlerquellen durch manuelle Builds oder inkonsistente Artefakte konnten so eliminiert werden.
 
----
+![Pipeline Summary](../../ressources/images/ci1.png)
+_Pipeline summary_
 
-## CI-Pipeline (Build-Prozess)
+![Ci-Build](../../ressources/images/ci2.png)
+_CI-Build der App_
 
-Zur Reduktion manueller Schritte wird eine CI-Pipeline eingeführt, welche den Build-Prozess der Anwendung automatisiert. Änderungen am Quellcode führen automatisch zur Erstellung eines neuen, versionierten Artefakts.
+![CI Build DH Artefact](../../ressources/images/ci3.png)
+_CI Build des Dockerhub-Artefakts_
 
-Dadurch wird sichergestellt, dass jeder Build reproduzierbar ist und eindeutig einer Code-Version zugeordnet werden kann.
-
-
-
----
-
-## Deployment-Strategie und GitOps-Ansatz
-
-Die Auslieferung der Anwendung erfolgt nach dem GitOps-Prinzip. Dabei dient das Git-Repository als zentrale Quelle der Wahrheit für den gewünschten Systemzustand.
-
-Änderungen an der Deployment-Konfiguration werden versioniert im Repository abgelegt und automatisch in die Kubernetes-Umgebung synchronisiert.
-
-
+Diese Pipeline bildet die technische Grundlage für den nachfolgenden GitOps-basierten Deployment-Ansatz.
 
 ---
 
-## Deployment in Kubernetes
+## Einführung eines GitOps-Ansatzes mit Argo CD
 
-Die Anwendung wird in der Kubernetes-Umgebung deployt und über entsprechende Ressourcen wie Deployments, Services und Konfigurationsobjekte betrieben.
+Für das Deployment der Anwendung wurde ein **GitOps-Ansatz** umgesetzt. Dabei dient das Git-Repository als Single Source of Truth für den gewünschten Systemzustand.  
+Als zentrales Werkzeug wurde **Argo CD** eingesetzt.
 
-Kubernetes übernimmt dabei zentrale Aufgaben wie:
-- Überwachung der Anwendung
-- Neustart bei Fehlern
-- Skalierung
+Die Struktur folgt dem **App-of-Apps-Pattern**, bei dem eine zentrale Bootstrap-Applikation weitere Applikationen verwaltet, darunter:
 
+- Argo CD Core-Komponenten
+- Sealed Secrets Controller
+- LicenseMonitor Applikation
 
+Diese Struktur ermöglicht eine klare Trennung von Verantwortlichkeiten und eine saubere Steuerung von Abhängigkeiten.
 
----
+![Argo CD UI Overview](../../ressources/images/argocd_ui_overview.png)
+_ArgoCD UI Overview_
 
-## Code- und Konfigurationsanpassungen
-
-Für den Betrieb in einer cloud-nativen Umgebung sind gezielte Anpassungen am bestehenden Code notwendig. Diese betreffen insbesondere Konfigurationshandling, Logging und Umgebungsvariablen.
-
-Der fachliche Funktionsumfang der Anwendung bleibt dabei unverändert.
-
-
+Durch GitOps wird sichergestellt, dass jede Änderung nachvollziehbar versioniert ist und automatisch in die Kubernetes-Umgebung synchronisiert wird.
 
 ---
 
-## Aufbau der Umgebungen
+## Sicheres Secrets Management mit Sealed Secrets
 
-Für den Betrieb und die Weiterentwicklung des Lizenzüberwachungstools werden mehrere logisch getrennte Umgebungen berücksichtigt. Ziel ist es, Änderungen kontrolliert entwickeln, testen und betreiben zu können, ohne den stabilen Betrieb der Anwendung zu gefährden.
+Ein wesentlicher Schwerpunkt der Improve-Phase lag auf der **Sicherstellung von Datenschutz und Betriebssicherheit**. Sensible Daten wie Zertifikate, Tenant-Profile und Authentifizierungsparameter dürfen weder im Klartext im Repository abgelegt noch manuell in Pods konfiguriert werden.
 
-Im Rahmen dieser Semesterarbeit liegt der Fokus auf einer lokalen Umgebung, welche sowohl Entwicklungs- als auch Laufzeitcharakter hat und ein späteres produktives Setup realistisch abbildet.
+Daher wurde das **Sealed-Secrets-Konzept** eingeführt:
 
-Die Umgebung basiert auf folgenden Grundprinzipien:
-- Containerisierte Ausführung der Anwendung mittels Docker  
-- Betrieb innerhalb einer lokalen Kubernetes-Umgebung (Minikube)  
-- Trennung von Anwendungscode, Konfiguration und Infrastruktur  
-- Reproduzierbare Bereitstellung über deklarative Konfigurationen  
+- Secrets werden lokal erstellt
+- clientseitig verschlüsselt (`kubeseal`)
+- als SealedSecrets im Git-Repository versioniert
+- ausschließlich im Cluster entschlüsselt
 
-Durch diese Struktur kann die Anwendung lokal entwickelt, getestet und betrieben werden, während die Architektur so ausgelegt ist, dass eine spätere Erweiterung auf weitere Umgebungen grundsätzlich möglich bleibt.
+```text
+infra/ 
+└── k8s/     
+	└── apps/         
+		└── licensetool/             
+			└── overlays/                 
+				└── dev/                     
+					└── sealed-secret.yaml
+```
+_Dateistruktur der Sealed Secrets_
 
-Die verwendeten Test-Tenants der ISE AG dienen dabei als Stellvertreter für weitere Tenants und ermöglichen eine realitätsnahe Validierung der implementierten Prozesse.
+```output
+PS C:\Users\miguel.schneider> kubeseal --controller-name "sealed-secrets" --controller-namespace "kube-system" --fetch-cert
+-----BEGIN CERTIFICATE-----
+MIIEzDCCArSgAwIBAgIQaW/IbK02PNctcQpjqggjnzANBgkqhkiG9w0BAQsFADAA
+MB4XDTI2MDEyMjIzMzE1OFoXDTM2MDEyMDIzMzE1OFowADCCAiIwDQYJKoZIhvcN...
+```
+_Teiloutput CLI, des Sealed-Secrets _
+
+Damit ist sichergestellt, dass zu keinem Zeitpunkt Klartext-Secrets im Repository oder in der CI/CD-Pipeline vorhanden sind.
 
 ---
-## Technische Stabilisierung und Standardisierung der Kubernetes-Integration
 
-Im Rahmen der Improve-Phase wurde die Applikation systematisch stabilisiert und an die Anforderungen einer containerisierten Kubernetes-Umgebung angepasst. Ausgangspunkt war die Erkenntnis aus den vorherigen Phasen, dass die bestehende Anwendung zwar funktional war, jedoch stark auf eine lokale Ausführungsumgebung ausgelegt war. Insbesondere der Umgang mit Zertifikaten, Konfigurationsdateien und sensitiven Zugangsdaten führte nach dem Deployment in Kubernetes zu wiederkehrenden Fehlern und nicht reproduzierbarem Verhalten.
+## Technische Stabilisierung der Kubernetes-Integration
 
-Ein zentrales Problem bestand darin, dass sicherheitsrelevante Artefakte wie Zertifikate, Tenant-Konfigurationen und Authentifizierungsparameter ursprünglich als lokale Dateien oder Umgebungsvariablen vorlagen. In einer Kubernetes-Umgebung mit mehreren Pods und Replikas ist dieser Ansatz nicht tragfähig, da Pods zustandslos sein müssen und keine impliziten Annahmen über lokale Dateisysteme zulässig sind. Diese Erkenntnis führte zur gezielten Entscheidung, sämtliche dieser Artefakte konsequent in Kubernetes Secrets zu überführen.
+Während der Umsetzung traten mehrere Kubernetes-spezifische Probleme auf, insbesondere im Umgang mit Secrets, Mount-Pfaden und Namenskonventionen.  
+Zertifikate und Konfigurationsprofile waren ursprünglich auf lokale Dateisysteme ausgelegt und mussten für einen zustandslosen Pod-Betrieb angepasst werden.
 
-Im ersten Verbesserungsschritt wurden alle benötigten Konfigurationsprofile (OIDC-, SharePoint- und Tenant-spezifische Profile) identifiziert, bereinigt und als Secrets abgelegt. Anschliessend wurden diese Secrets als schreibgeschützte Volumes in die Pods gemountet. Dabei zeigte sich, dass bereits kleine Abweichungen in Pfadangaben oder Dateinamen zu Laufzeitfehlern führten, welche erst durch eine detaillierte Log-Analyse sichtbar wurden. Diese Fehler konnten durch eine konsequente Vereinheitlichung der Mount-Pfade und durch eine klare Ordnerstruktur innerhalb des Containers behoben werden.
+Die folgenden Verbesserungen wurden umgesetzt:
+- Migration aller Zertifikate und Profile in Kubernetes Secrets
+- Einheitliche Mount-Pfade innerhalb der Container
+- Trennung von tenant-spezifischen und serviceweiten Zertifikaten
+- Einführung verbindlicher Namenskonventionen für Kubernetes-Ressourcen
 
-Ein weiterer wesentlicher Verbesserungspunkt war die Trennung von tenant-spezifischen Zertifikaten und serviceweiten Zertifikaten. Ursprünglich wurden unterschiedliche Zertifikate teilweise gemeinsam abgelegt, was zu Unklarheiten bei der Zuordnung führte. Im Improve-Schritt wurden daher pro Tenant eigene Secrets erstellt, welche jeweils nur die zugehörigen Schlüsseldateien enthielten. Diese wurden gezielt an tenant-spezifische Mount-Pfade gebunden. Parallel dazu wurden die Konfigurationsdateien der Applikation angepasst, sodass sie explizit auf diese Pfade verweisen. Dadurch konnte sichergestellt werden, dass jede Instanz der Applikation jederzeit das korrekte Zertifikat verwendet.
+Die Wirksamkeit dieser Massnahmen wurde iterativ überprüft durch:
+- Analyse von Pod-Logs
+- Validierung gemounteter Dateien
+- Funktionstests der Microsoft- und SharePoint-Integrationen
 
-Während der Umsetzung traten mehrere Kubernetes-spezifische Validierungsprobleme auf, unter anderem durch nicht konforme Ressourcennamen oder unzulässige Sonderzeichen. Diese Probleme führten zu einer zusätzlichen Verbesserung: Es wurden verbindliche Namenskonventionen für Secrets, Volumes und Mounts definiert und konsequent angewendet. Dies erhöhte nicht nur die technische Stabilität, sondern verbesserte auch die Wartbarkeit und Lesbarkeit der Deployment-Konfigurationen.
+📌 **Hier CLI-Ausgabe einfügen:**  
+`kubectl exec … ls /app/certs`  
+`kubectl logs licensetool-pod`
 
-Die Wirksamkeit der getroffenen Massnahmen wurde iterativ überprüft. Dazu gehörten das gezielte Auslesen von Pod-Logs, das Validieren der gemounteten Dateien innerhalb der Container sowie funktionale Tests der relevanten API-Endpunkte. Durch diesen schrittweisen Verbesserungsprozess konnten FileNotFound-Fehler, Authentifizierungsprobleme gegenüber Microsoft Entra ID sowie fehlerhafte Zugriffe auf SharePoint-Listen vollständig eliminiert werden.
+Nach diesen Anpassungen lief die Applikation stabil mit mehreren Replikas.
 
-Nach Abschluss der Improve-Phase läuft die Applikation stabil in der Minikube-Umgebung und unterstützt den Betrieb mit mehreren Replikas ohne funktionale Einschränkungen. Die Authentifizierung funktioniert zuverlässig, Lizenzdaten können sowohl gelesen als auch zurück in SharePoint geschrieben werden, und alle sicherheitsrelevanten Daten werden Kubernetes-konform verwaltet. Damit wurde nicht nur ein technisches Problem gelöst, sondern auch eine nachhaltige, skalierbare Grundlage für den weiteren Betrieb und mögliche Erweiterungen geschaffen.
+---
 
+## Fehleranalyse und Troubleshooting (Argo CD Repo Server)
 
+Während der GitOps-Einführung trat ein kritischer Fehler auf:
 
+> _Failed to load target state: connection refused (argocd-repo-server)_
 
+Die Ursache lag in einem inkonsistenten Zustand des Argo CD Repo Servers. Ein gezielter Neustart des Deployments stellte die Kommunikation wieder her.
 
-## Secrets management
+📌 **Hier CLI-Ausgabe einfügen:**  
+`kubectl -n argocd get pods`  
+`kubectl -n argocd rollout restart deploy/argocd-repo-server`
 
-Zur sicheren Verwaltung von sensiblen Konfigurationsdaten (z. B. Zertifikate, Zugangsdaten) wird das Sealed-Secrets-Konzept eingesetzt.  
-Dabei werden Secrets clientseitig mit dem öffentlichen Schlüssel des Clusters verschlüsselt und als sogenannte SealedSecrets im Git-Repository versioniert.  
-Die Entschlüsselung erfolgt ausschliesslich im Kubernetes-Cluster durch den Sealed-Secrets-Controller, wodurch sichergestellt ist, dass zu keinem Zeitpunkt Klartext-Secrets im Repository abgelegt werden.
+📌 **Hier Screenshot einfügen:**  
+_Argo CD – Application Status: Healthy / Synced_
 
+Dieser Schritt wurde dokumentiert und als Bestandteil des Troubleshooting-Wissens festgehalten.
 
+---
 
+## Ergebnis und Zielerreichung der Improve-Phase
 
+Durch die umgesetzten Massnahmen konnten alle definierten Ziele erreicht werden:
 
+- Die Infrastruktur wurde evaluiert und nachvollziehbar festgelegt
+- Build- und Deployment-Prozesse sind automatisiert
+- Die Anwendung folgt Cloud-Native-Core-Prinzipien
+- Datenschutz und Betriebssicherheit sind Kubernetes-konform umgesetzt
+- Die Umgebung ist reproduzierbar und stabil betreibbar
 
+---
 
+## Fazit der Improve-Phase
 
+Die Improve-Phase führte zu einer nachhaltigen technischen Stabilisierung des Lizenzüberwachungstools.  
+Durch die Kombination aus **CI/CD**, **GitOps**, **Sealed Secrets** und klarer Architektur wurde eine Lösung geschaffen, die nicht nur funktional, sondern auch betrieblich und organisatorisch überzeugt.
 
-
-
-
-
-
-
-
-
-
-
-
-
+Die Anwendung kann nach einem vollständigen Re-Deploy des Clusters ohne manuelle Eingriffe wiederhergestellt werden und bildet eine solide Grundlage für zukünftige Erweiterungen oder einen möglichen Cloud-Betrieb.
