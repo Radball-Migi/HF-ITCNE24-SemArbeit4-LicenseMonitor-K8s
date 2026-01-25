@@ -93,6 +93,10 @@ kubectl apply `
 # Warten bis argocd-server ready ist
 Wait-DeploymentReady -Namespace "argocd" -DeploymentName "argocd-server" -TimeoutSeconds 300
 
+Kubectl -n ingress-nginx apply -f "C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s\infra\k8s\apps\ingress-nginx\base\ingress-nginx-controler-lb.yaml"
+Kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller
+start-sleep -Seconds 10
+
 # Minikube tunnel im Hintergrund (falls du LB/Ingress brauchst)
 Start-MinikubeTunnelBackground -Profile $minikubeProfile
 
