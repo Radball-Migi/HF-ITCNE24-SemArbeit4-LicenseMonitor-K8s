@@ -1,13 +1,9 @@
-from apiflask import APIBlueprint, Schema
-from apiflask.fields import Integer as APIInteger
-from apiflask.fields import String as APIString
-from apiflask.validators import Length
-from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy import Integer as sa_Integer
-from sqlalchemy import String as sa_String
-from sqlalchemy.orm import relationship
-
 from app.extensions import db
+from apiflask import APIBlueprint, Schema
+from apiflask.fields import Integer as APIInteger, String as APIString
+from apiflask.validators import Length
+from sqlalchemy.orm import relationship
+from sqlalchemy import Table, Column, Integer as sa_Integer, String as sa_String, ForeignKey
 
 
 class LicenseModel(db.Model):
@@ -26,13 +22,14 @@ class LicenseOut(Schema):
     name = APIString()
     count = APIInteger()
 
+    
 class LicenseStatusOut(Schema):
     skuid = APIString(required=True)
     skupartnumber = APIString(required=True)
     consumed_units = APIInteger(required=True)
     available_units = APIInteger(required=True)
     free_units = APIInteger(required=True)
-
+    
 class LicenseStatusAllOut(Schema):
     skuid = APIString(required=True)
     skupartnumber = APIString(required=True)

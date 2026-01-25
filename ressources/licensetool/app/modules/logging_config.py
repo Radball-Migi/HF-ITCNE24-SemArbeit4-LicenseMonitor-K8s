@@ -1,7 +1,6 @@
-import logging
 import os
+import logging
 from logging.handlers import RotatingFileHandler
-
 
 def setup_logging(log_file='logs/licensetool.log', level=logging.INFO):
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
