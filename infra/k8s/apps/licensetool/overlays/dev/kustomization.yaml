@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: licensetool
+
+resources:
+  - ../../base
+  - ingress-nginx.yaml
+  - sealedsecrets/licensetool-cert-flask-service-iseapp-1588.sealedsecret.yaml
+  - sealedsecrets/licensetool-cert-infos.sealedsecret.yaml
+  - sealedsecrets/licensetool-cert-iseschool.sealedsecret.yaml
+  - sealedsecrets/licensetool-cert-iseschool2013.sealedsecret.yaml
+  - sealedsecrets/licensetool-env.sealedsecret.yaml
+  - sealedsecrets/licensetool-profiles-auth.sealedsecret.yaml
+  - sealedsecrets/licensetool-profiles-sharepoint.sealedsecret.yaml
+  - sealedsecrets/licensetool-profiles-tenants.sealedsecret.yaml
+  - sealedsecrets/licensetool-tls.sealedsecret.yaml
+  - sealedsecrets/regcred.sealedsecret.yaml
+
+patches:
+  - path: patches/deployment-patch.yaml

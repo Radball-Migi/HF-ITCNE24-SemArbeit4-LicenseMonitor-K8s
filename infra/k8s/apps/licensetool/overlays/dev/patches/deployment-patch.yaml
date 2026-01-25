@@ -2,28 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: licensetool
-  namespace: default
-  labels:
-    app: licensetool
 spec:
-  replicas: 3
-  revisionHistoryLimit: 5
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
-  selector:
-    matchLabels:
-      app: licensetool
   template:
-    metadata:
-      labels:
-        app: licensetool
     spec:
       imagePullSecrets:
         - name: regcred
-
       volumes:
         - name: profiles-auth
           secret:
@@ -31,12 +14,9 @@ spec:
         - name: profiles-sharepoint
           secret:
             secretName: licensetool-profiles-sharepoint
-        - name: profiles-tennants
+        - name: profiles-tenants
           secret:
             secretName: licensetool-profiles-tenants
-        # - name: certs
-        #   secret:
-        #     secretName: licensetool-certs
         - name: certs-infos
           secret:
             secretName: licensetool-cert-infos
@@ -49,19 +29,12 @@ spec:
         - name: licensetool-cert-flask-service-iseapp-1588
           secret:
             secretName: licensetool-cert-flask-service-iseapp-1588
-
       containers:
         - name: licensetool
           image: docker.io/radballmigi/licensemonitor-dev:latest
-          imagePullPolicy: Always
-          ports:
-            - name: http
-              containerPort: 5000
-
           envFrom:
             - secretRef:
                 name: licensetool-env
-
           volumeMounts:
             - name: profiles-auth
               mountPath: /app/config-profiles/auth
@@ -69,12 +42,9 @@ spec:
             - name: profiles-sharepoint
               mountPath: /app/config-profiles/sharepoint
               readOnly: true
-            - name: profiles-tennants
+            - name: profiles-tenants
               mountPath: /app/config-profiles/tenants
               readOnly: true
-            # - name: certs
-            #   mountPath: /app/certs
-            #   readOnly: true
             - name: certs-infos
               mountPath: /app/certs/infos
               readOnly: true
@@ -87,4 +57,3 @@ spec:
             - name: licensetool-cert-flask-service-iseapp-1588
               mountPath: /app/certs/flask-service-iseapp-1588
               readOnly: true
-
