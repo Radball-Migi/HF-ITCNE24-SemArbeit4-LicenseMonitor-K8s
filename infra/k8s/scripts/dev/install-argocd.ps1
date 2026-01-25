@@ -41,7 +41,7 @@ function Wait-DeploymentReady {
   param(
     [string]$Namespace,
     [string]$DeploymentName,
-    [int]$TimeoutSeconds = 180
+    [int]$TimeoutSeconds = 240
   )
   Write-Host "Waiting for deployment/$DeploymentName in ns/$Namespace ..." -ForegroundColor Magenta
   kubectl -n $Namespace rollout status "deploy/$DeploymentName" "--timeout=${TimeoutSeconds}s"
@@ -79,10 +79,10 @@ function Start-MinikubeTunnelBackground {
 
 Write-Host "=== ArgoCD Install + GitOps Bootstrap ===" -ForegroundColor Cyan
 
-# 1) Namespace argocd sicherstellen
+# Namespace argocd sicherstellen
 Ensure-Namespace -Name "argocd"
 
-# 2) ArgoCD installieren (server-side apply)
+# ArgoCD installieren (server-side apply)
 Write-Host "Applying ArgoCD install manifest..." -ForegroundColor Magenta
 kubectl apply `
   --server-side `
@@ -90,26 +90,33 @@ kubectl apply `
   -n "argocd" `
   -f $argocdInstallYaml | Out-Null
 
-# 3) Warten bis argocd-server ready ist
+# Warten bis argocd-server ready ist
 Wait-DeploymentReady -Namespace "argocd" -DeploymentName "argocd-server" -TimeoutSeconds 300
 
-# 4) Minikube tunnel im Hintergrund (falls du LB/Ingress brauchst)
+# Minikube tunnel im Hintergrund (falls du LB/Ingress brauchst)
 Start-MinikubeTunnelBackground -Profile $minikubeProfile
 
 Write-Host "Waiting briefly for minikube tunnel to establish..." -ForegroundColor Magenta
 Start-Sleep -Seconds 10
 
-# 5) Root-App anwenden (App-of-Apps)
+# Restart argocd-repo-server damit es den Tunnel/LB erkennt
+Write-Host "Restarting argocd-repo-server to recognize minikube tunnel..." -ForegroundColor Magenta
+kubectl -n argocd rollout restart deploy/argocd-repo-server
+Wait-DeploymentReady -Namespace "argocd" -DeploymentName "argocd-repo-server" -TimeoutSeconds 180
+Start-Sleep -Seconds 10 # Extra warten damit Repo-Server wirklich bereit ist.
+
+# Root-App anwenden (App-of-Apps)
 Write-Host "Applying Root-App (GitOps bootstrap)..." -ForegroundColor Magenta
 kubectl apply -n argocd -f $rootAppYaml | Out-Null
 
-# 6) Warten bis sealed-secrets Application existiert (Argo hat sie aus Git erstellt)
+# Warten bis sealed-secrets Application existiert (Argo hat sie aus Git erstellt)
 Wait-ArgoAppExists -AppName "sealed-secrets" -TimeoutSeconds 180
 
-# 7) Warten bis sealed-secrets Controller Deployment wirklich ready ist
-Wait-DeploymentReady -Namespace "kube-system" -DeploymentName "sealed-secrets" -TimeoutSeconds 300
+# Warten bis sealed-secrets Controller Deployment wirklich ready ist
+Wait-DeploymentReady -Namespace "kube-system" -DeploymentName "sealed-secrets" -TimeoutSeconds 400
+Start-Sleep -Seconds 20 # Extra warten damit Controller wirklich bereit ist.
 
-# 8) sealed-secrets public cert fetchen (für neue SealedSecrets nach Rebuild)
+# sealed-secrets public cert fetchen (für neue SealedSecrets nach Rebuild)
 Write-Host "Fetching sealed-secrets public cert -> $sealedSecretsCertOut" -ForegroundColor Magenta
 
 # Output-Verzeichnis sicherstellen
@@ -125,7 +132,7 @@ kubeseal --fetch-cert `
 
 Write-Host "sealed-secrets cert saved." -ForegroundColor Green
 
-# 9) Initial ArgoCD Admin Passwort ausgeben (nur initial sinnvoll)
+# Initial ArgoCD Admin Passwort ausgeben (nur initial sinnvoll)
 try {
   $initPWArgoCD = kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" `
     | ForEach-Object { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($_)) }
