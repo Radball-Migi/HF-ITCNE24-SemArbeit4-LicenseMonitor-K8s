@@ -53,12 +53,8 @@ Alle Kubernetes-Ressourcen (Deployments, Services, Secrets, ConfigMaps) werden *
 - Sichtbare Abweichungen („OutOfSync“) im Argo-Dashboard
 - Rollbacks jederzeit möglich durch Git-Historie
 
-📸 **Screenshot einfügen:**
+![ArgoCD Sync Status](../../ressources/images/argocd_sync_licensetool.png)
 
-- Argo CD Application Overview
-    
-- Status: `Healthy` / `Synced`
-    
 
 ---
 
@@ -70,14 +66,26 @@ Zur Überprüfung des stabilen Betriebs wurden folgende Kubernetes-Kontrollen ei
 
 `kubectl get pods -n licensetool kubectl get deploy -n licensetool`
 
+```Output
+PS C:\Users\miguel.schneider> kubectl get pods -n licensetool
+NAME                          READY   STATUS    RESTARTS      AGE
+licensetool-bc659b4f5-7wfnc   1/1     Running   2 (16m ago)   18h
+licensetool-bc659b4f5-lrn5f   1/1     Running   2 (16m ago)   18h
+licensetool-bc659b4f5-pb2wt   1/1     Running   2 (16m ago)   18h
+PS C:\Users\miguel.schneider> kubectl get deploy -n licensetool
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+licensetool   3/3     3            3           18h
+PS C:\Users\miguel.schneider>
+```
+
 Erwartetes Verhalten:
 
 - Pods befinden sich im Status `Running`
 - Deployments zeigen `READY = desired replicas`
 - Keine Pods im Zustand `CrashLoopBackOff` oder `Error`
 
-📸 **Screenshot einfügen:**  
-`kubectl get pods -o wide`
+![¨Get all Pods](../../ressources/images/get_pods.png)
+_Get all Pods in Cluster_
 
 ---
 
@@ -89,9 +97,7 @@ Fehlerfälle (z. B. fehlende Zertifikate) wurden gezielt provoziert und überpr�
 📸 **Screenshot einfügen:**
 
 - Pod-Restart nach fehlerhaftem Secret
-    
 - Erfolgreicher Neustart nach Korrektur
-    
 
 ---
 
@@ -102,20 +108,58 @@ Ein zentraler Bestandteil der Control-Phase ist die **Absicherung sensibler Date
 ### Kontrollmechanismen
 
 - Zertifikate und Auth-Profile liegen ausschliesslich als Kubernetes Secrets vor
-    
 - Keine sensiblen Daten im Git-Repository
-    
 - Mount-Pfade werden im Deployment definiert
-    
 - Anwendung startet nur bei korrekt gemounteten Secrets
-    
 
-`kubectl get secrets -n licensetool kubectl describe secret <secret-name>`
+![Get Secrets](../../ressources/images/get_secrets.png)
+_Get all Secrets und describe secret_
 
-📸 **Screenshot einfügen:**
+```yaml
+template:
+    metadata:
+      labels:
+        app: licensetool
+    spec:
+      containers:
+        - envFrom:
+            - secretRef:
+                name: licensetool-env
+          image: docker.io/radballmigi/licensemonitor-dev:latest
+          imagePullPolicy: Always
+          name: licensetool
+          ports:
+            - containerPort: 5000
+              name: http
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /app/config-profiles/auth
+              name: profiles-auth
+              readOnly: true
+            - mountPath: /app/config-profiles/sharepoint
+              name: profiles-sharepoint
+              readOnly: true
+            - mountPath: /app/config-profiles/tenants
+              name: profiles-tenants
+              readOnly: true
+            - mountPath: /app/certs/infos
+              name: certs-infos
+              readOnly: true
+            - mountPath: /app/certs/iseschool
+              name: licensetool-cert-iseschool
+              readOnly: true
+            - mountPath: /app/certs/iseschool2013
+              name: licensetool-cert-iseschool2013
+              readOnly: true
+            - mountPath: /app/certs/flask-service-iseapp-1588
+              name: licensetool-cert-flask-service-iseapp-1588
+              readOnly: true
+```
 
-- `kubectl get secrets`
-- Deployment-Manifest mit `volumeMounts`
+_Ausschnitt aus Deploy Manifest_
 
 ---
 
@@ -134,13 +178,59 @@ Die Tests prüfen die Kernfunktionen der Lizenzverarbeitung unabhängig von der 
 
 Beispiel:
 
-`def test_get_license_status(client):     response = client.get("/api/v1/licenses/status/show")     assert response.status_code == 200`
+```python
+@pytest.fixture(scope='function')
+def client(app, db):
+    with app.app_context():
+        create_test_data()
+        test_client = app.test_client()
+        test_client.post('/api/v1/auth/test-login')
+        yield test_client
+        db.session.remove()
+        db.get_engine().dispose()
+```
 
 Mocking stellt sicher, dass keine externen Abhängigkeiten (Microsoft Graph, SharePoint) notwendig sind.
 
-📸 **Screenshot einfügen:**
+Die Pytests werden in der Ci-Pipeline bereits gemacht.
 
-- Pytest-Ergebnis (`pytest --cov`)
+```yaml
+jobs:
+  tests:
+    name: lint-test-security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: |
+            ${{ vars.WORKDIR }}/licensetool/requirements.txt
+            
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ${{ vars.WORKDIR }}/licensetool/requirements.txt
+          pip install pytest flake8 black isort mypy bandit ruff
+  
+      - name: Run Unit Tests
+        run: |
+          pytest ${{ vars.WORKDIR }}/licensetool/test/. -v --tb=short
+
+      - name: Run Integration Tests
+        run: |
+          pytest ${{ vars.WORKDIR }}/licensetool/test/. -v --tb=short
+        continue-on-error: false
+```
+
+_Ci-Pipeline-yaml ausschnitt Pytests_
+
+![Pytests](../../ressources/images/pytest_ci.png)
+_Output Ci-Pipeline Pytests_
 
 ---
 
@@ -149,6 +239,14 @@ Mocking stellt sicher, dass keine externen Abhängigkeiten (Microsoft Graph, Sha
 Die Anwendung schreibt Logs direkt auf `stdout`, wodurch diese über Kubernetes ausgelesen werden können:
 
 `kubectl logs -l app=licensetool -n licensetool`
+
+![Logs des Tools](../../logs_licensetool.png)
+_Logs des Lizenztools via CLI_
+
+Nebst das wir die Logs über Kubernetes auslesen können, Können wir auch über ArgoCD die Logs konsultieren:
+
+![Logs des Tools in ArgoCD](../../ressources/images/logs_licensetool_argocd.png)
+_Logs des Lizenztools via ArgoCD_
 
 ### Kontrollierte Fehlerfälle
 

@@ -24,7 +24,7 @@ $rootAppYaml       = Join-Path $repoRoot "infra\k8s\bootstrap\argocd\root-app\de
 
 $sealedSecretsCertOut = Join-Path $repoRoot "infra\k8s\certs\sealed-secrets\sealed-secrets-cert.pem"
 
-$minikubeProfile = "semar4-dev"
+$minikubeProfile = "semar4-dev"  # Anpassen falls anderer Minikube Profilname
 
 # -----------------------------------------------------------------------------
 

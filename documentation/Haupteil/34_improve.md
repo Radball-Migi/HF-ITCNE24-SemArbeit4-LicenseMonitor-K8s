@@ -116,7 +116,7 @@ Die Pipeline übernimmt unter anderem:
 
 - Build der Applikation
 - Erstellung eines versionierten Container-Images
-- Bereitstellung des Artefakts für das Deployment
+- Bereitstellung des Artefakts für das Deployment (Image auf Docker Hub in privatem Repository)
 
 Dadurch ist jeder Build eindeutig einer Code-Version zugeordnet und reproduzierbar. Fehlerquellen durch manuelle Builds oder inkonsistente Artefakte konnten so eliminiert werden.
 
@@ -127,7 +127,10 @@ _Pipeline summary_
 _CI-Build der App_
 
 ![CI Build DH Artefact](../../ressources/images/ci3.png)
-_CI Build des Dockerhub-Artefakts_
+_CI Build des Docker Hub-Artefakts_
+
+![Docker Hub Repo](../../ressources/images/image_in_dockerhub.png)
+_Image in privatem Docker Hub Repository_
 
 Diese Pipeline bildet die technische Grundlage für den nachfolgenden GitOps-basierten Deployment-Ansatz.
 
@@ -190,7 +193,7 @@ PS C:\Users\miguel.schneider> kubeseal --controller-name "sealed-secrets" --cont
 MIIEzDCCArSgAwIBAgIQaW/IbK02PNctcQpjqggjnzANBgkqhkiG9w0BAQsFADAA
 MB4XDTI2MDEyMjIzMzE1OFoXDTM2MDEyMDIzMzE1OFowADCCAiIwDQYJKoZIhvcN...
 ```
-_Teiloutput CLI, des Sealed-Secrets _
+_Teiloutput CLI, des Sealed-Secrets_
 
 Damit ist sichergestellt, dass zu keinem Zeitpunkt Klartext-Secrets im Repository oder in der CI/CD-Pipeline vorhanden sind.
 
@@ -213,6 +216,8 @@ Die Wirksamkeit dieser Massnahmen wurde iterativ überprüft durch:
 - Funktionstests der Microsoft- und SharePoint-Integrationen
 
 Nach diesen Anpassungen lief die Applikation stabil mit mehreren Replikas.
+
+
 
 ---
 
