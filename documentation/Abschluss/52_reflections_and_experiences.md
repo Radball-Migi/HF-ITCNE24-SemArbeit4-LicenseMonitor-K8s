@@ -23,6 +23,11 @@ Nach dem dritten Sprint traten Schwierigkeiten bei der Zusammenführung mehrerer
 
 Erschwerend wirkten sich parallel bestehende familiäre Belastungen aus, welche die verfügbare Zeit und Konzentration reduzierten. Diese Situation verdeutlichte die Bedeutung einer **sauberen Branch-Strategie**, regelmässiger Integration sowie einer frühzeitigen Stabilisierung des Hauptbranches – insbesondere in zeitkritischen Projektphasen.
 
+Rückblickend zeigte sich, dass eine frühere Konsolidierung der Entwicklungsstände
+sowie kleinere, häufiger integrierte Änderungen den entstandenen Zeitdruck
+hätten reduzieren können.
+
+
 ---
 
 ### Hohe Lernkurve durch neue Technologien und Arbeitsweisen
@@ -38,6 +43,9 @@ Die vierte Semesterarbeit brachte eine hohe Dichte an neuen Technologien und Kon
 
 Diese Vielzahl neuer Inhalte führte dazu, dass der Fokus bewusst auf **Stabilität und Funktionalität** gelegt wurde. Dies zeigte sich unter anderem darin, dass Commits, Issues und Pull Requests nicht in jedem Fall vollständig dem idealtypischen agilen oder DevOps-orientierten Vorgehen entsprachen. Diese Abweichungen wurden bewusst in Kauf genommen, um den Projekterfolg sicherzustellen.
 
+Diese Priorisierung stellte sicher, dass zentrale Projektziele erreicht wurden,
+auch wenn dabei nicht jeder Prozess in idealer Form umgesetzt werden konnte.
+
 ---
 
 ### Kubernetes-Komplexität und manuelle Schritte im Betrieb
@@ -49,7 +57,8 @@ Der erstmalige Aufbau eines eigenen Kubernetes-Clusters stellte eine zentrale te
 - Manuelles Einspielen der Secrets
 - Initiale Synchronisation der Applikation
 
-Trotz dieser Einschränkungen stellt der aktuelle Stand einen wichtigen Lernerfolg dar. Das Cluster kann reproduzierbar gebootstrapped werden und bildet eine solide Grundlage für weiterführende Automatisierungen in zukünftigen Projekten.
+Trotz dieser Einschränkungen stellt der aktuelle Stand einen wichtigen Lernerfolg dar. Der aktuelle Stand stellt einen wichtigen Lernerfolg dar und bildet eine solide Grundlage für weiterführende Automatisierungen, welche den manuellen Aufwand in zukünftigen Projekten weiter reduzieren können.
+
 
 ---
 
@@ -59,7 +68,7 @@ Die vierte Semesterarbeit ermöglichte eine intensive Auseinandersetzung mit **C
 
 Ein zentrales Learning war das **praktische Verständnis von Kubernetes** – nicht nur auf konzeptioneller Ebene, sondern auch im operativen Betrieb. Besonders in der Anfangsphase, beim Aufbau der CI-Pipeline sowie bei der späteren Einführung von GitOps, konnte ein tiefgehendes Verständnis für moderne Deployment- und Betriebsmodelle entwickelt werden.
 
-Das Arbeiten nach dem **GitOps-Prinzip** erforderte ein Umdenken gegenüber klassischen Deployment-Ansätzen. Deployments erfolgen nicht mehr aktiv, sondern ergeben sich aus dem definierten Soll-Zustand im Repository. Dieses Vorgehen erwies sich als transparent, stabil und gut nachvollziehbar.
+Das Arbeiten nach dem **GitOps-Prinzip** erforderte ein Umdenken gegenüber klassischen Deployment-Ansätzen. Deployments erfolgen nicht mehr aktiv, sondern ergeben sich aus dem definierten Soll-Zustand im Repository. Diese Erkenntnis führte zu einem nachhaltigeren Verständnis von Betrieb und Wartbarkeit cloud-nativer Systeme.
 
 ---
 
@@ -85,6 +94,9 @@ Die vierte Semesterarbeit kann insgesamt als **erfolgreich** bewertet werden. Tr
 Im Vergleich zu den vorherigen Semesterarbeiten zeigt sich eine klare **Weiterentwicklung im Bereich Architektur, Betriebskonzepte und methodisches Vorgehen**. Insbesondere das Verständnis für Kubernetes, GitOps und DevOps stellt einen wichtigen Meilenstein im bisherigen Studienverlauf dar.
 
 Diese Arbeit bildet eine solide Grundlage für weiterführende Projekte und motiviert dazu, die identifizierten Verbesserungspotenziale in den kommenden Semestern gezielt anzugehen.
+
+Die gewonnenen Erkenntnisse gehen dabei über die konkrete Umsetzung hinaus und stellen einen nachhaltigen Kompetenzgewinn für zukünftige berufliche und akademische Projekte dar.
+
 
 ---
 

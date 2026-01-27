@@ -14,7 +14,10 @@ nav_order: 3
 [Quelle](../Quellverzeichnis/index.md#erreichte-ziele) 
 
 
-Zu Beginn der Semesterarbeit wurden diese Zielsetzungen bewusst **offen und adaptiv** formuliert. Dies ermöglichte es, im Projektverlauf neue Erkenntnisse zu berücksichtigen und technische Entscheidungen gezielt anzupassen, ohne die übergeordneten Projektziele aus den Augen zu verlieren.
+Zu Beginn der Semesterarbeit wurden die Zielsetzungen bewusst **offen und adaptiv** formuliert.
+Dieser Ansatz erwies sich im Projektverlauf als zielführend, da neue Erkenntnisse,
+technische Einschränkungen und architektonische Fragestellungen iterativ berücksichtigt
+werden konnten, ohne die übergeordneten Projektziele aus den Augen zu verlieren.
 
 |Zielsetzung|Kurzbeschreibung|Erfüllungsgrad|
 |---|---|---|
@@ -22,6 +25,9 @@ Zu Beginn der Semesterarbeit wurden diese Zielsetzungen bewusst **offen und adap
 |Aufbau einer CI/CD-Pipeline|Automatisierung von Build-, Test- und Bereitstellungsprozessen mit iterativer Toolwahl.|⚠️✅|
 |Cloud-Native-Core-Architektur|Weiterentwicklung des bestehenden Tools in Richtung Containerisierung, Modularität und Skalierbarkeit.|✅|
 |Datenschutz, Stabilität und Betriebssicherheit|Sicherstellung eines sicheren, stabilen und reproduzierbaren Betriebs durch geeignete technische Massnahmen.|✅|
+Die Bewertung des Erfüllungsgrades erfolgte dabei nicht rein technisch,
+sondern unter Berücksichtigung von Architekturqualität, Wartbarkeit
+und langfristiger Betriebssicherheit.
 
 Im Folgenden wird erläutert, wie die einzelnen Ziele konkret umgesetzt wurden und welche Anpassungen sich im Verlauf der Arbeit ergeben haben.
 
@@ -86,3 +92,23 @@ Die initial definierten Zielsetzungen wurden **in wesentlichen Punkten erreicht*
 Abweichungen von der ursprünglichen Planung stellten keine Zielverfehlung dar, sondern führten zu **fundierteren architektonischen Entscheidungen** und einer nachhaltigeren Lösung.
 
 Die daraus gewonnenen Erkenntnisse werden im folgenden Kapitel detailliert beschrieben.
+
+---
+## Reflexion und Projekterkenntnisse
+
+Die Arbeit zeigte deutlich, dass Cloud-Native-Architekturen weniger durch einzelne
+Tools, sondern vielmehr durch **klare Strukturierung, saubere Trennung von Verantwortlichkeiten
+und konsequente Automatisierung** an Qualität gewinnen.
+
+Besonders prägend war die Erkenntnis, dass GitOps nicht nur ein Deployment-Ansatz ist,
+sondern ein zentrales Betriebskonzept, welches Nachvollziehbarkeit, Stabilität
+und Reproduzierbarkeit signifikant verbessert. Ebenso wurde ersichtlich, dass
+eine bewusste Reduktion von Komplexität – etwa durch den Verzicht auf unnötige
+Manuelleingriffe – die Betriebssicherheit erhöht.
+
+Insgesamt konnte mit dieser Semesterarbeit eine stabile, reproduzierbare
+und nachvollziehbare Cloud-Native-Betriebsplattform geschaffen werden,
+welche nicht nur die definierten Projektziele erfüllt, sondern auch
+eine belastbare Grundlage für zukünftige Erweiterungen und produktionsnahe
+Szenarien darstellt.
+

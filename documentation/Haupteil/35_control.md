@@ -40,6 +40,22 @@ Die Control-Phase verfolgt folgende Ziele:
 | Zugriffskontrolle        | Microsoft-Authentifizierung via gemountete Zertifikate |
 
 ---
+## Control Plan (Betrieb & Überwachung)
+
+Zur nachhaltigen Sicherstellung des stabilen Betriebs wurde ein einfacher Control Plan definiert,
+welcher die wichtigsten Kontrollpunkte, Trigger und Reaktionsmechanismen beschreibt.
+
+| Kontrollpunkt        | Tool / Quelle              | Trigger / Abweichung              | Reaktion |
+|----------------------|----------------------------|-----------------------------------|----------|
+| Argo CD Sync Status  | ArgoCD UI / CLI            | Status ≠ Synced oder Health ≠ Healthy | Ursache analysieren, Git-Stand prüfen |
+| Namespace vorhanden  | Argo CD (Redeploy GIF)     | Namespace gelöscht                | Automatische Neuerstellung via Argo CD |
+| Pod Status           | kubectl get pods           | Pod nicht Running / Ready         | Logs & Events analysieren |
+| Pod Restarts         | kubectl get pods           | Erhöhter Restart Counter          | Root Cause Analyse |
+| Secret Verfügbarkeit | kubectl exec / Events      | Secret fehlt / nicht unsealed     | SealedSecrets prüfen |
+| CI Pipeline          | GitHub Actions             | Tests fehlschlagen                | Merge stoppen, Fix im dev |
+
+
+---
 
 ## GitOps-Kontrolle mit Argo CD
 
@@ -93,8 +109,10 @@ Erwartetes Verhalten:
 _Get all Pods in Cluster_
 
 **Hinweis:**
-Im aktuellen Deployment sind keine expliziten `livenessProbe`/`readinessProbe` definiert. 
-Die Betriebskontrolle erfolgt daher über Kubernetes-Pod-Conditions (`Ready`, `ContainersReady`) sowie Events und Restart-Zähler.
+Im aktuellen Deployment sind bewusst keine expliziten `livenessProbe`/`readinessProbe` definiert.
+Die Betriebskontrolle erfolgt über Kubernetes-Pod-Conditions (`Ready`, `ContainersReady`),
+Events sowie Argo CD Health-Checks. In einer produktiven Umgebung würden zusätzliche
+HTTP-basierte Probes ergänzt.
 
 ![Pods ready](../../ressources/images/pods_ready.png)
 _Pod ready_
@@ -115,6 +133,12 @@ Fehlerfälle (z. B. fehlende Zertifikate) wurden gezielt provoziert und überpr�
 
 Zur Validierung der automatischen Neustarts wurden Kubernetes-Events ausgewertet. 
 Dabei ist ersichtlich, dass Pods bei Änderungen oder Fehlerzuständen beendet und automatisch neu erstellt werden (Self-Healing).
+
+Als kritisch gelten dabei insbesondere folgende Zustände:
+- Argo CD Application Status ≠ `Synced` oder Health ≠ `Healthy`
+- Pods nicht im Status `Running` oder `Ready`
+- Anstieg des Restart Counters innerhalb kurzer Zeit
+- Fehlende oder nicht unsealed Secrets
 
 Befehl:
 ```Bash
@@ -316,7 +340,11 @@ _Login-Error in Log, via ArgoCD_
 
 Als finaler Kontrollschritt wurde das System vollständig neu aufgebaut:
 
-`kubectl delete namespace licensetool kubectl apply -k .`
+`kubectl delete namespace licensetool`
+
+Der Redeploy-Test wurde durchgeführt, indem der gesamte Namespace gelöscht wurde.
+Die anschliessende Wiederherstellung erfolgte ausschliesslich automatisiert
+über Argo CD (App-of-Apps), ohne manuelle Eingriffe mittels `kubectl apply`.
 
 ### Erfolgsbewertung
 
@@ -328,6 +356,10 @@ Als finaler Kontrollschritt wurde das System vollständig neu aufgebaut:
 
 ✅ **Ergebnis:**  
 Das System ist vollständig **reproduzierbar und stabil betreibbar**.
+
+![Redeploy Licensetool](../../ressources/images/redeploy-health.gif)
+_Redeploy der App nach gelöschtem Namespace (Gif wurde gekürzt, wegen warte dauer)_
+
 
 ---
 
