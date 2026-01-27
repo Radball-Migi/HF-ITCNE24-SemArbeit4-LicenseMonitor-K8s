@@ -14,9 +14,10 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: licensetool
+
   syncPolicy:
-     automated:
-       prune: true
-       selfHeal: true
-  syncOptions:
-    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
