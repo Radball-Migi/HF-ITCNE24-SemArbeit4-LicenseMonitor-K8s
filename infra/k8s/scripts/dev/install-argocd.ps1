@@ -117,8 +117,9 @@ kubectl apply -n argocd -f $rootAppYaml | Out-Null
 Wait-ArgoAppExists -AppName "sealed-secrets" -TimeoutSeconds 180
 
 # Warten bis sealed-secrets Controller Deployment wirklich ready ist
-Wait-DeploymentReady -Namespace "kube-system" -DeploymentName "sealed-secrets" -TimeoutSeconds 400
+Wait-DeploymentReady -Namespace "kube-system" -DeploymentName "sealed-secrets"
 Start-Sleep -Seconds 20 # Extra warten damit Controller wirklich bereit ist.
+Wait-DeploymentReady -Namespace "kube-system" -DeploymentName "sealed-secrets"
 
 # sealed-secrets public cert fetchen (für neue SealedSecrets nach Rebuild)
 Write-Host "Fetching sealed-secrets public cert -> $sealedSecretsCertOut" -ForegroundColor Magenta

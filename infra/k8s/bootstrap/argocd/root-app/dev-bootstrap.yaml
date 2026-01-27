@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: "https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s"
-    targetRevision: "dev" # branch
+    targetRevision: "main" # branch
     path: infra/k8s/clusters/dev
   destination:
     server: https://kubernetes.default.svc
