@@ -9,6 +9,6 @@ has_children: "true"
 Mithilfe der Qualitätsmanagementmethode Six Sigma, möchte ich den DMAIC-Zyklus Schritt für Schritt durchgehen und so den Prozess meiner Zielsetzung näherbringen. 
 Wie genau der DMAIC-Zyklus abläuft, wurde bereits in der Einleitung unter dem [Punkt 2.5](../Einleitung/25_projektmanagement-methode.md#six-sigma) erläutert.
 
-![MSVC](../../ressources/images/msvc.png)
+![MSVC](../../ressources/images/msvc-k8s.png)
 
 [Quelle](../Quellverzeichnis/index.md#hauptteil)

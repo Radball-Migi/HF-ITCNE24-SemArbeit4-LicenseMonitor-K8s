@@ -103,3 +103,21 @@ Die gewonnenen Erkenntnisse gehen dabei über die konkrete Umsetzung hinaus und 
 ## Dankbarkeit
 
 Ich möchte mich herzlich bei meinen Fachdozenten bedanken, die mich während der vierten Semesterarbeit unterstützt haben. Ihre fachliche Kompetenz und Geduld haben wesentlich dazu beigetragen, dass Herausforderungen gemeistert und neue Kenntnisse aufgebaut werden konnten.
+
+
+
+
+
+# Sprints
+
+Im Rahmen meiner Semesterarbeit werde ich die Fortschritte anhand von Sprints evaluieren, um zu überprüfen, ob ich im Zeitplan liege.
+
+Die Sprints ermöglichen es mir, Reflexionen zu erstellen, die aufzeigen, wie der Sprintzyklus verlaufen ist und welche Aspekte erfolgreich oder verbesserungswürdig waren.
+
+
+![Sprint Review](../../ressources/images/sprint-review.png)
+
+[Quelle](../Quellverzeichnis/index.md#sprint-review)
+
+
+

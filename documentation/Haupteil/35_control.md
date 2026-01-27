@@ -85,7 +85,10 @@ Zur Überprüfung des stabilen Betriebs wurden folgende Kubernetes-Kontrollen ei
 
 ### Pod- und Deployment-Status
 
-`kubectl get pods -n licensetool kubectl get deploy -n licensetool`
+```Bash
+kubectl get pods -n licensetool 
+kubectl get deploy -n licensetool
+```
 
 ```Output
 PS C:\Users\miguel.schneider> kubectl get pods -n licensetool
