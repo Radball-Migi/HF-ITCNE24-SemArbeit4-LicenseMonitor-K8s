@@ -86,6 +86,12 @@ _Gewichtete Entscheidungsmatrix, mehr details zur Evaluation unter [Vergleich de
 - AWS: **5.85**
 - ⭐ **Lokal: 7.70**
 
+Die gewählte Infrastruktur wurde zusätzlich praktisch validiert, indem ein vollständiger Kubernetes-Cluster lokal betrieben und erfolgreich initialisiert wurde.
+Der Cluster wurde erfolgreich initialisiert und besteht aus einem Kubernetes-Control-Plane-Node.
+
+![Minikube Cluster](../../ressources/images/cluster.png)
+_Minikube Cluster_
+
 Mit dieser Entscheidung wurde eine stabile und datenschutzkonforme Grundlage geschaffen, auf der alle weiteren Verbesserungen aufbauen.
 
 ---
@@ -105,6 +111,20 @@ Die Anwendung wurde als Container-Image bereitgestellt, ohne die fachliche Logik
 
 ![aufbau](../../ressources/images/zielarchitektur.png)
 _Zielarchitektur_
+
+Die Applikation wird als Deployment mit mehreren Replikas betrieben und erfüllt damit zentrale Cloud-Native-Core-Prinzipien.
+
+```Terminal
+PS C:\Users\miguel.schneider> kubectl get pods -n licensetool -o wide
+NAME                          READY   STATUS    RESTARTS      AGE   IP            NODE         NOMINATED NODE   READINESS GATES
+licensetool-bc659b4f5-58p7m   1/1     Running   1 (20m ago)   8h    10.244.0.58   semar4-dev   <none>           <none>
+licensetool-bc659b4f5-9jq2n   1/1     Running   1 (20m ago)   8h    10.244.0.57   semar4-dev   <none>           <none>
+licensetool-bc659b4f5-vq5fx   1/1     Running   1 (20m ago)   8h    10.244.0.52   semar4-dev   <none>           <none>
+PS C:\Users\miguel.schneider> kubectl get deployment licensetool -n licensetool
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+licensetool   3/3     3            3           8h
+PS C:\Users\miguel.schneider>
+```
 
 ---
 
@@ -129,8 +149,18 @@ _CI-Build der App_
 ![CI Build DH Artefact](../../ressources/images/ci3.png)
 _CI Build des Docker Hub-Artefakts_
 
+Jedes Container-Image ist eindeutig einer Code-Version zugeordnet und kann reproduzierbar aus der Registry bezogen werden.
+
 ![Docker Hub Repo](../../ressources/images/image_in_dockerhub.png)
 _Image in privatem Docker Hub Repository_
+
+![Ci-Pipeline all pased](../../ressources/images/ci_pipeline_god.png)
+_GitHub Actions Run_
+
+![Image Pull Pod](../../ressources/images/image_of_pod.png)
+_Image in Pod_
+
+Das durch die CI-Pipeline erzeugte Container-Image wird direkt im Kubernetes-Pod referenziert.
 
 Diese Pipeline bildet die technische Grundlage für den nachfolgenden GitOps-basierten Deployment-Ansatz.
 
@@ -151,6 +181,11 @@ Diese Struktur ermöglicht eine klare Trennung von Verantwortlichkeiten und eine
 
 ![Argo CD UI Overview](../../ressources/images/argocd_ui_overview.png)
 _ArgoCD UI Overview_
+
+![ArgoCD Apps](../../ressources/images/argocd_apps.png)
+_ArgoCD verwaltete Apps_
+
+Argo CD verwaltet die Applikation deklarativ auf Basis des Git-Repositories.
 
 Durch GitOps wird sichergestellt, dass jede Änderung nachvollziehbar versioniert ist und automatisch in die Kubernetes-Umgebung synchronisiert wird.
 
@@ -195,6 +230,11 @@ MB4XDTI2MDEyMjIzMzE1OFoXDTM2MDEyMDIzMzE1OFowADCCAiIwDQYJKoZIhvcN...
 ```
 _Teiloutput CLI, des Sealed-Secrets_
 
+![Sealed Secrets in K8s](../../ressources/images/sealed_secrets_in_k8s.png)
+_Sealed Secrets im Cluster_
+
+Die verschlüsselten Secrets werden als eigene Kubernetes-Ressourcen verwaltet.
+
 Damit ist sichergestellt, dass zu keinem Zeitpunkt Klartext-Secrets im Repository oder in der CI/CD-Pipeline vorhanden sind.
 
 ---
@@ -216,8 +256,6 @@ Die Wirksamkeit dieser Massnahmen wurde iterativ überprüft durch:
 - Funktionstests der Microsoft- und SharePoint-Integrationen
 
 Nach diesen Anpassungen lief die Applikation stabil mit mehreren Replikas.
-
-
 
 ---
 

@@ -55,6 +55,11 @@ Alle Kubernetes-Ressourcen (Deployments, Services, Secrets, ConfigMaps) werden *
 
 ![ArgoCD Sync Status](../../ressources/images/argocd_sync_licensetool.png)
 
+In der vorliegenden Konfiguration ist Argo CD mit automatischer Synchronisation und Self-Healing aktiv. 
+Manuelle Änderungen am Cluster werden dadurch unmittelbar korrigiert, weshalb ein OutOfSync-Zustand im Normalbetrieb nur kurzzeitig oder gar nicht sichtbar ist.
+
+![ArgoCD Apps Health](../../ressources/images/argocd_apps_health.png)
+_ArgoCD Health der Apps_
 
 ---
 
@@ -87,6 +92,20 @@ Erwartetes Verhalten:
 ![¨Get all Pods](../../ressources/images/get_pods.png)
 _Get all Pods in Cluster_
 
+**Hinweis:**
+Im aktuellen Deployment sind keine expliziten `livenessProbe`/`readinessProbe` definiert. 
+Die Betriebskontrolle erfolgt daher über Kubernetes-Pod-Conditions (`Ready`, `ContainersReady`) sowie Events und Restart-Zähler.
+
+![Pods ready](../../ressources/images/pods_ready.png)
+_Pod ready_
+
+![Pod Events](../../ressources/images/pods_events.png)
+_Pod Events_
+
+![Pods restarts](../../ressources/images/pods_restarts.png)
+_Pod restarts_
+
+
 ---
 
 ### Health-Checks & Neustarts
@@ -94,10 +113,25 @@ _Get all Pods in Cluster_
 Durch die containerisierte Architektur kann Kubernetes fehlerhafte Pods automatisch neu starten.  
 Fehlerfälle (z. B. fehlende Zertifikate) wurden gezielt provoziert und überprüft.
 
-📸 **Screenshot einfügen:**
+Zur Validierung der automatischen Neustarts wurden Kubernetes-Events ausgewertet. 
+Dabei ist ersichtlich, dass Pods bei Änderungen oder Fehlerzuständen beendet und automatisch neu erstellt werden (Self-Healing).
 
-- Pod-Restart nach fehlerhaftem Secret
-- Erfolgreicher Neustart nach Korrektur
+Befehl:
+```Bash
+kubectl get events -n licensetool --sort-by='.lastTimestamp'
+```
+
+```Text
+Normal  SandboxChanged   pod/licensetool-bc659b4f5-9jq2n   Pod sandbox changed, it will be killed and re-created
+Normal  Killing          pod/licensetool-bc659b4f5-9jq2n   Stopping container licensetool
+Normal  SuccessfulDelete replicaset/licensetool-bc659b4f5 Deleted pod
+Normal  SuccessfulCreate replicaset/licensetool-74ffb6ddd4 Created pod
+Normal  Started          pod/licensetool-74ffb6ddd4-5hf2m Started container licensetool
+Normal  ScalingReplicaSet deployment/licensetool           Scaled up/down replica sets
+Normal  Unsealed         sealedsecret/licensetool-env      SealedSecret unsealed successfully
+```
+
+_Ausgabe gekürzt auf relevante Events zur Darstellung von Neustarts, Rollouts und Secret-Handling._
 
 ---
 
@@ -160,6 +194,29 @@ template:
 ```
 
 _Ausschnitt aus Deploy Manifest_
+
+```Text
+PS C:\Users\miguel.schneider> kubectl -n licensetool exec -it licensetool-74ffb6ddd4-5hf2m -- ls -la /app/certs
+total 12
+drwxr-xr-x 6 root root 4096 Jan 27 21:15 .
+drwxr-xr-x 1 root root 4096 Jan 27 21:15 ..
+drwxrwxrwt 3 root root  140 Jan 27 21:15 flask-service-iseapp-1588
+drwxrwxrwt 3 root root  120 Jan 27 21:15 infos
+drwxrwxrwt 3 root root  140 Jan 27 21:15 iseschool
+drwxrwxrwt 3 root root  140 Jan 27 21:15 iseschool2013
+PS C:\Users\miguel.schneider> kubectl -n licensetool exec -it licensetool-74ffb6ddd4-5hf2m -- ls -la /app/config-profiles
+total 12
+drwxr-xr-x 5 root root 4096 Jan 27 21:15 .
+drwxr-xr-x 1 root root 4096 Jan 27 21:15 ..
+drwxrwxrwt 3 root root  100 Jan 27 21:15 auth
+drwxrwxrwt 3 root root  100 Jan 27 21:15 sharepoint
+drwxrwxrwt 3 root root  120 Jan 27 21:15 tenants
+PS C:\Users\miguel.schneider>
+```
+_Secrets im Pod_
+
+Die gemounteten Zertifikate und Konfigurationsprofile wurden direkt im Container-Dateisystem verifiziert.
+
 
 ---
 
@@ -240,6 +297,7 @@ Die Anwendung schreibt Logs direkt auf `stdout`, wodurch diese über Kubernetes 
 
 `kubectl logs -l app=licensetool -n licensetool`
 
+
 ![Logs des Tools](../../logs_licensetool.png)
 _Logs des Lizenztools via CLI_
 
@@ -248,22 +306,9 @@ Nebst das wir die Logs über Kubernetes auslesen können, Können wir auch über
 ![Logs des Tools in ArgoCD](../../ressources/images/logs_licensetool_argocd.png)
 _Logs des Lizenztools via ArgoCD_
 
-### Kontrollierte Fehlerfälle
+![Log-Error via ArgoCD](../../ressources/images/login_error_log_argocd.png)
+_Login-Error in Log, via ArgoCD_
 
-- Fehlende Tenant-Konfiguration
-- Ungültige JSON-Profile
-- Fehlerhafte Authentifizierungsdaten
-- API-Fehler externer Services
-
-Erwartetes Verhalten:
-
-- Fehler werden sauber geloggt
-- Anwendung stürzt nicht ab
-- HTTP-Antwort bleibt kontrolliert (`200` oder definierter Fehlercode)
-
-📸 **Screenshot einfügen:**
-
-- Log-Auszug mit ERROR- und INFO-Einträgen
 
 ---
 
@@ -306,3 +351,43 @@ Die Control-Phase bestätigt, dass die im Projekt umgesetzten Massnahmen **nicht
 Durch die Kombination aus **GitOps**, **Kubernetes-Mechanismen**, **automatisierten Tests** und **klaren Kontrollpunkten** ist das System langfristig wartbar und robust gegenüber Änderungen.
 
 Damit ist sichergestellt, dass zukünftige Erweiterungen oder Anpassungen durchgeführt werden können, **ohne die Stabilität oder Sicherheit des Systems zu gefährden**.
+
+---
+
+## Lessons Learned aus dem Merge-Konflikt
+
+Im Verlauf der Arbeit zeigte sich, dass auch ein technisch konfliktfreier Git-Merge zu inhaltlich fehlerhaften Zuständen führen kann. Im konkreten Fall führte ein Merge zwischen `dev` und `main` dazu, dass zentrale Konfigurationsdateien unbeabsichtigt entfernt wurden, obwohl der Applikationscode zuvor stabil funktionierte.
+
+Besonders kritisch war dabei, dass der Fehler nicht unmittelbar sichtbar war: Die Anwendung liess sich teilweise weiterhin starten, während Build-, Lint- und Testprozesse im `main`-Branch fehlschlugen. Erst durch den Vergleich mit einem bekannten funktionierenden Commit konnte die Ursache eindeutig identifiziert werden.
+
+![Git Log nach Merge-Korrektur](../../ressources/images/merge-errors.png)
+_Git-Historie nach Bereinigung_
+
+![Ci-Errors](../../ressources/images/ci_pipeline_merge_error.png)
+_Fehler beim Merchen, obwohl auch Actions funktioniert haben_
+
+---
+
+## Präventive Massnahmen
+
+Zur Sicherstellung der Stabilität und Reproduzierbarkeit wurden folgende Massnahmen definiert:
+
+- Der **`dev`-Branch** wird als _Source of Truth_ für lauffähigen und getesteten Applikationscode betrachtet
+- Der **`main`-Branch** dient primär als Abgabe- und Dokumentationsstand
+- Kritische Konfigurationsdateien (z. B. `pyproject.toml`) werden bei Merges explizit überprüft
+  
+```bash
+git ls-tree -r HEAD -- ressources/licensetool/pyproject.toml
+```
+
+![Check of File .toml is there](../../ressources/images/check_file_toml.png)
+_Screenshot aus der CLI_
+
+- Bei Unsicherheiten wird auf **selektives Übernehmen einzelner Dateien** statt auf vollständige Merges gesetzt
+- Vor der Abgabe wird der Stand durch CI/CD (Tests, Linting, Build) validiert
+
+---
+
+## Fazit
+
+Der Vorfall verdeutlicht, dass sauberes Branching und kontrollierte Merges ein zentraler Bestandteil stabiler DevOps-Prozesse sind. Durch die getroffenen Massnahmen konnte die Applikationsstabilität wiederhergestellt und das Risiko ähnlicher Fehler in Zukunft deutlich reduziert werden.
