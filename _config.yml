@@ -56,6 +56,7 @@ exclude:
   - ressources/notizen/
   - documentation/Hauptteil/Notizen_aufbau.md
   - ressources/scripts/Logininfos.json
+  - ressources/docs/infrastructure_evaluation.md
   
 
 # Exclude from processing.
