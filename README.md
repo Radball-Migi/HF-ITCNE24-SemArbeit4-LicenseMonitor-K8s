@@ -9,12 +9,12 @@ Die **Dokumentation** selbst befindet sich auf **GitHub Pages**:
 
 ## 🔗 Wichtige Dateien & Links
 
-| Bereich                 | Beschreibung                                                                         | Link                                                                                     |
-| ----------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| 🧠 **Dokumentation**    | Projektbeschreibung, Ziele, Evaluation etc.                                          | [GitHub Pages](https://radball-migi.github.io/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/) |
-| 🧠  **Dokumentation**   | Projektbeschreibung, Ziele, Evaluation etc. (Alles in einem File, ohne Formatierung) | [merged.md](./documentation/merged.md)                                                   |
-| ⚙️ **CI/CD Pipeline**   | GitHub Actions Workflow für Build & Deployment                                       | [`.github/workflows`](./.github/workflows/)                                              |
-| 🧭 **Git-Konventionen** | Commit-Kultur, Branching & SemVer-Regeln                                             | [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md)                                   |
+| Bereich                 | Beschreibung                                                                             | Link                                                                                     |
+| ----------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| 🧠 **Dokumentation**    | Projektbeschreibung, Ziele, Evaluation etc.                                              | [GitHub Pages](https://radball-migi.github.io/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/) |
+| 🧠  **Dokumentation**   | Projektbeschreibung, Ziele, Evaluation etc. (**Alles in einem File, ohne Formatierung**) | [merged.md](./documentation/merged.md)                                                   |
+| ⚙️ **CI/CD Pipeline**   | GitHub Actions Workflow für Build & Deployment                                           | [`.github/workflows`](./.github/workflows/)                                              |
+| 🧭 **Git-Konventionen** | Commit-Kultur, Branching & SemVer-Regeln                                                 | [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md)                                   |
 
 ---
 
