@@ -9,11 +9,12 @@ Die **Dokumentation** selbst befindet sich auf **GitHub Pages**:
 
 ## 🔗 Wichtige Dateien & Links
 
-| Bereich | Beschreibung | Link |
-|----------|---------------|------|
-| 🧠 **Dokumentation** | Projektbeschreibung, Ziele, Evaluation etc. | [GitHub Pages](https://radball-migi.github.io/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/) |
-| 🧭 **Git-Konventionen** | Commit-Kultur, Branching & SemVer-Regeln | [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md) |
-| ⚙️ **CI/CD Pipeline** | GitHub Actions Workflow für Build & Deployment | [`.github/workflows`](./.github/workflows/) |
+| Bereich                 | Beschreibung                                                                         | Link                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| 🧠 **Dokumentation**    | Projektbeschreibung, Ziele, Evaluation etc.                                          | [GitHub Pages](https://radball-migi.github.io/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s/) |
+| 🧠  **Dokumentation**   | Projektbeschreibung, Ziele, Evaluation etc. (Alles in einem File, ohne Formatierung) | [merged.md](./documentation/merged.md)                                                   |
+| ⚙️ **CI/CD Pipeline**   | GitHub Actions Workflow für Build & Deployment                                       | [`.github/workflows`](./.github/workflows/)                                              |
+| 🧭 **Git-Konventionen** | Commit-Kultur, Branching & SemVer-Regeln                                             | [`.github/CONTRIBUTING.md`](./.github/CONTRIBUTING.md)                                   |
 
 ---
 
@@ -23,13 +24,6 @@ Die **Dokumentation** selbst befindet sich auf **GitHub Pages**:
 - **Stable / Releases:** in `main`  
 - **Automatische Builds:** werden durch Push auf `dev` oder `main` ausgelöst  
 - **Versions-Tags:** nach SemVer (`vX.Y.Z`)  
-
----
-
-## 🧩 Weiteres
-
-Später können zusätzliche Inhalte (z. B. Architekturdiagramme, API-Doku oder Tests) ergänzt werden.  
-Dieses README bleibt der zentrale Einstiegspunkt und Navigations-Wegweiser durch das Repository.
 
 ---
 
@@ -54,6 +48,13 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 ├───documentation
 │   │   Gemfile
 │   │   index.md
+│   │   merged.md
+│   │   merge_all_file2one.ps1
+│   │
+│   ├───Abschluss
+│   │       51_reaced_goals.md
+│   │       52_reflections_and_experiences.md
+│   │       index.md
 │   │
 │   ├───Einleitung
 │   │       21_ausgangslage.md
@@ -61,6 +62,7 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │       23_zeitplan.md
 │   │       24_risiken.md
 │   │       25_projektmanagement-methode.md
+│   │       26_SEUSAG.md
 │   │       index.md
 │   │
 │   ├───Haupteil
@@ -169,12 +171,15 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │           │       README.md
 │           │
 │           └───prod
+|
 ├───ressources
 │   │   Link.md
 │   │
 │   ├───docs
 │   │       .$seusag.drawio.bkp
 │   │       .$zielarchitektur.drawio.bkp
+│   │       HF-ITCNE24-SemArbeit4-Licensetool-k8s.ppsx
+│   │       HF-ITCNE24-SemArbeit4-Licensetool-k8s.pptx
 │   │       infrastructure_evaluation.md
 │   │       ITCNE24_Semesterarbeit_4_Einreichungsformular_Miguel_Schneider.pdf
 │   │       Risikomatrix.pptx
@@ -182,7 +187,79 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │       zielarchitektur.drawio
 │   │
 │   ├───images
-│   │       <Bilder für Doku>
+│   │       abschluss.png
+│   │       analyze.png
+│   │       argocd.png
+│   │       argocd_application_overview.png
+│   │       argocd_apps.png
+│   │       argocd_apps_health.png
+│   │       argocd_sync_licensetool.png
+│   │       argocd_ui_overview.png
+│   │       ausgangslage.png
+│   │       check_file_toml.png
+│   │       ci1.png
+│   │       ci2.png
+│   │       ci3.png
+│   │       ci_pipeline_god.png
+│   │       ci_pipeline_merge_error.png
+│   │       cluster.png
+│   │       control.png
+│   │       create_cluster_and_install_argocd.gif
+│   │       create_cluster_output.png
+│   │       define.png
+│   │       devops.png
+│   │       dockerhub_image_dev.png
+│   │       encripted_sealedsecret.png
+│   │       error_pat_deploy.png
+│   │       experience.png
+│   │       get_pods.png
+│   │       get_secrets.png
+│   │       goal.png
+│   │       idee.png
+│   │       image_in_dockerhub.png
+│   │       image_of_pod.png
+│   │       ise-licensemonitor_app_symbol.png
+│   │       issue_in_planer.png
+│   │       kanban.png
+│   │       kanban_and_scrum.png
+│   │       licensetool_argocd_states.png
+│   │       login_error_log_argocd.png
+│   │       login_new_app_on_k8s.png
+│   │       logo_license-tool_mainpage.png
+│   │       logs_licensetool.png
+│   │       logs_licensetool_argocd.png
+│   │       measure.png
+│   │       merge-errors.png
+│   │       migi.jpg
+│   │       migi_logo.png
+│   │       milestone_sprint_2.png
+│   │       minikube_cluster_dev_status.png
+│   │       msvc-k8s.png
+│   │       pods_events.png
+│   │       pods_ready.png
+│   │       pods_restarts.png
+│   │       pytest_ci.png
+│   │       quellverzeichnis.png
+│   │       reached-goals.png
+│   │       redeploy-health.gif
+│   │       retro_sprint-1-old.png
+│   │       retro_sprint-1.png
+│   │       retro_sprint-2.png
+│   │       retro_sprint-3.png
+│   │       risikomatrix.png
+│   │       roadmap_github-project.png
+│   │       scrum.png
+│   │       sealed_secrets_in_k8s.png
+│   │       sealed_secrets_in_repo.png
+│   │       seusag.gif
+│   │       six-sigma.png
+│   │       sprint-review.png
+│   │       sprint1_roadmap.png
+│   │       sprint2_roadmap.png
+│   │       sprint3_roadmap.png
+│   │       verbessern.png
+│   │       welcome.png
+│   │       zielarchitektur.png
 │   │
 │   ├───licensetool
 │   │   │   .env
@@ -192,6 +269,7 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │   │   config.py
 │   │   │   dockerfile
 │   │   │   dockerfile.test
+│   │   │   pyproject.toml
 │   │   │   requirements.txt
 │   │   │
 │   │   ├───app
@@ -210,7 +288,7 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │   │   ├───main
 │   │   │   │       routes.py
 │   │   │   │       __init__.py
-│   │   │   │
+│   │   │   │    
 │   │   │   ├───models
 │   │   │   │       license.py
 │   │   │   │
@@ -218,7 +296,7 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │   │   │       logging_config.py
 │   │   │   │       mggraph.py
 │   │   │   │       sku_mapping.py
-│   │   │   │
+│   │   │   │    
 │   │   │   ├───monitoring
 │   │   │   │       routes.py
 │   │   │   │       __init__.py
@@ -240,45 +318,6 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │   │           statusall.html
 │   │   │           tenant.html
 │   │   │
-│   │   ├───certs
-│   │   │   │   certcreation.sh
-│   │   │   │
-│   │   │   ├───flask_service_ISEAPP-1588
-│   │   │   │       mycert_semarb3.cer
-│   │   │   │       mycert_semarb3.key
-│   │   │   │       mycert_semarb3.pem
-│   │   │   │       mycert_semarb3.pfx
-│   │   │   │
-│   │   │   ├───infos
-│   │   │   │       cert-iseschool-info.json
-│   │   │   │       cert-iseschool2013-info.json
-│   │   │   │
-│   │   │   ├───iseschool
-│   │   │   │       mycert_iseschool.crt
-│   │   │   │       mycert_iseschool.key
-│   │   │   │       mycert_iseschool.pem
-│   │   │   │       mycert_iseschool.pfx
-│   │   │   │
-│   │   │   └───iseschool2013
-│   │   │           mycert_iseschool2013.crt
-│   │   │           mycert_iseschool2013.key
-│   │   │           mycert_iseschool2013.pem
-│   │   │           mycert_iseschool2013.pfx
-│   │   │
-│   │   ├───config
-│   │   │       sku_mappings.json
-│   │   │
-│   │   ├───config-profiles
-│   │   │   ├───auth
-│   │   │   │       oidc-config-iseschool2013-profile.json
-│   │   │   │
-│   │   │   ├───sharepoint
-│   │   │   │       sp-config-iseschool2013-profile.json
-│   │   │   │
-│   │   │   └───tenants
-│   │   │           config-iseschool-profile.json
-│   │   │           config-iseschool2013-profile.json
-│   │   │
 │   │   ├───logs
 │   │   │       licensetool.log
 │   │   │
@@ -294,9 +333,8 @@ HF-ITCNE24-SEMARBEIT4-LICENSEMONITOR-K8S
 │   │           test_mggraph.py
 │   │           test_monitoring.py
 │   │           __init__.py
-│   │
+│   │   
 │   └───notizen
-│           Backup_improvesem4.md
 │           Kubectlcomands.md
 │           minikubecomands.md
 │

@@ -14,6 +14,7 @@ ressources/scripts/Logininfos_local.json
 ressources/licensetool/config-profiles
 ressources/licensetool/.env
 ressources/licensetool/certs
+ressources/docs/HF-ITCNE24-SemArbeit4-Licensetool-k8s.pptx
 
 # Ignore all __pycache__ folders
 ressources/licensetool/__pycache__
