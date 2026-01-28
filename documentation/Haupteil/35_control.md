@@ -85,7 +85,7 @@ Zur Überprüfung des stabilen Betriebs wurden folgende Kubernetes-Kontrollen ei
 
 ### Pod- und Deployment-Status
 
-```PowerShell
+```powershell
 kubectl get pods -n licensetool 
 kubectl get deploy -n licensetool
 ```
