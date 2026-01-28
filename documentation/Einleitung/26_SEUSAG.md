@@ -15,7 +15,7 @@ Mit der SEUSAG möchte ich die Systemgrenzen aufzeigen, welche bei meinem Projek
 Das betrachtete System ist ein **cloud-native Lizenzüberwachungssystem**, welches innerhalb eines Kubernetes-Clusters betrieben wird. Der Fokus dieser Semesterarbeit liegt auf **Deployment, Betrieb, Automatisierung und Sicherheit** der Lösung.
 
 > **Hinweis:**  
-> Das eigentliche Lizenzüberwachungstool (_ISE – Licensemonitor_) wurde bereits in der [**Semesterarbeit 3**]([Startseite | HF-ITCNE24-SemArbeit3-MSVC-Lizenztool](https://radball-migi.github.io/HF-ITCNE24-SemArbeit3-MSVC-Lizenztool/)) entwickelt. In dieser Arbeit erfolgt **keine Neuentwicklung der Applikation**, sondern deren Integration in eine GitOps-basierte Kubernetes-Umgebung.
+> Das eigentliche Lizenzüberwachungstool (_ISE – Licensemonitor_) wurde bereits in der [**Semesterarbeit 3**](https://radball-migi.github.io/HF-ITCNE24-SemArbeit3-MSVC-Lizenztool/) entwickelt. In dieser Arbeit erfolgt **keine Neuentwicklung der Applikation**, sondern deren Integration in eine GitOps-basierte Kubernetes-Umgebung.
 
 ---
 

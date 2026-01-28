@@ -28,13 +28,11 @@ In meiner Semesterarbeit werde ich mit Kanban und Scrum arbeiten.
 Weshalb gleich mit beiden Methoden?
 Kanban ist in GitHub bereits integriert, in welchen man Boards und Tasks selbst erstellen kann. Zusätzlich kann ich verschiedene Ansichten erstellen, wie beispielsweise eine Gant-Projektübersicht, etc. 
 Zusätzlich verwende ich die Sprints, welche in Scrum integriert sind. Da ich jedoch alleine bin, habe ich bei mir nur 3 Sprintgespräche eingeplant. Dies, weil die Daily Sprints wegfallen, da ich die Semesterarbeit als Einzelarbeit mache, somit bin ich Zeitgleich auch der Scrum-Master. 
-Um den Scrum-Prozess etwas aktiver zu gestalten, arbeite ich zudem mit **Userstorys**, welche ich im Projekt dokumentiere und priorisiere. Die Userstorys sind in den jeweiligen Issues im <a href="https://github.com/users/Radball-Migi/projects/7/views/1" target="_blank">License Tool Release</a> enthalten.
+Um den Scrum-Prozess etwas aktiver zu gestalten, arbeite ich zudem mit **Userstorys**, welche ich im Projekt dokumentiere und priorisiere. Die Userstorys sind in den jeweiligen Issues im <a href="https://github.com/users/Radball-Migi/projects/9/views/3" target="_blank">License Tool Release</a> enthalten.
 
-Dies ist der Link zu meinem Projektmanagement:
-<a href="https://github.com/users/Radball-Migi/projects/6/views/4" target="_blank">Roadmap · HF ITCNE24 - 3. Semarbeit MSVC - Projectplan</a>
+Dies ist der Link zu meiner Roadmap:
+<a href="https://github.com/users/Radball-Migi/projects/9/views/8" target="_blank">Roadmap · HF ITCNE24 - 4. Semesterarbeit K8s</a>
 
-und dieser zu meinem Licensetool release:
-<a href="https://github.com/users/Radball-Migi/projects/7/views/1" target="_blank">HF ITCNE24 - 3. Semarbeit MSVC - License Tool Release</a>
 
 ![Scrum and Kanban](../../ressources/images/kanban_and_scrum.png)
 [Quelle](../Quellverzeichnis/index.md#kanban-und-scrum)
@@ -65,6 +63,7 @@ Laut Six Sigma benötigen alle Prozesse Inputs und Outputs.
 Grundsätzlich gilt: Je mehr Inputs (oder Aktionen) kontrolliert werden können, desto besser lassen sich auch die Outputs steuern.
 
 ![Six Sigma](../../ressources/images/six-sigma.png)
+
 [Quelle](../Quellverzeichnis/index.md#six-sigma)
 
 ## DevOps
