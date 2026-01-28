@@ -90,6 +90,7 @@ kubectl get pods -n licensetool
 kubectl get deploy -n licensetool
 ```
 
+
 ```yaml
 PS C:\Users\miguel.schneider> kubectl get pods -n licensetool
 NAME                          READY   STATUS    RESTARTS      AGE
