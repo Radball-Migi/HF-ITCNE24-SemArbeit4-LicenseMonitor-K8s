@@ -85,11 +85,14 @@ Zur Überprüfung des stabilen Betriebs wurden folgende Kubernetes-Kontrollen ei
 
 ### Pod- und Deployment-Status
 
+Befehle: 
+
 ```powershell
 kubectl get pods -n licensetool 
 kubectl get deploy -n licensetool
 ```
 
+Output:
 
 ```yaml
 PS C:\Users\miguel.schneider> kubectl get pods -n licensetool
@@ -145,11 +148,12 @@ Als kritisch gelten dabei insbesondere folgende Zustände:
 - Fehlende oder nicht unsealed Secrets
 
 Befehl:
-```Bash
+```powershell
 kubectl get events -n licensetool --sort-by='.lastTimestamp'
 ```
 
-```Text
+
+```yaml
 Normal  SandboxChanged   pod/licensetool-bc659b4f5-9jq2n   Pod sandbox changed, it will be killed and re-created
 Normal  Killing          pod/licensetool-bc659b4f5-9jq2n   Stopping container licensetool
 Normal  SuccessfulDelete replicaset/licensetool-bc659b4f5 Deleted pod
@@ -223,7 +227,7 @@ template:
 
 _Ausschnitt aus Deploy Manifest_
 
-```Text
+```yaml
 PS C:\Users\miguel.schneider> kubectl -n licensetool exec -it licensetool-74ffb6ddd4-5hf2m -- ls -la /app/certs
 total 12
 drwxr-xr-x 6 root root 4096 Jan 27 21:15 .
@@ -412,7 +416,7 @@ Zur Sicherstellung der Stabilität und Reproduzierbarkeit wurden folgende Massna
 - Der **`main`-Branch** dient primär als Abgabe- und Dokumentationsstand
 - Kritische Konfigurationsdateien (z. B. `pyproject.toml`) werden bei Merges explizit überprüft
   
-```bash
+```powershell
 git ls-tree -r HEAD -- ressources/licensetool/pyproject.toml
 ```
 

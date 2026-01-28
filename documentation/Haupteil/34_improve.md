@@ -116,7 +116,7 @@ _Zielarchitektur_
 
 Die Applikation wird als Deployment mit mehreren Replikas betrieben und erfüllt damit zentrale Cloud-Native-Core-Prinzipien.
 
-```Text
+```yaml
 PS C:\Users\miguel.schneider> kubectl get pods -n licensetool -o wide
 NAME                          READY   STATUS    RESTARTS      AGE   IP            NODE         NOMINATED NODE   READINESS GATES
 licensetool-bc659b4f5-58p7m   1/1     Running   1 (20m ago)   8h    10.244.0.58   semar4-dev   <none>           <none>
@@ -204,7 +204,7 @@ Daher wurde das **Sealed-Secrets-Konzept** eingeführt:
 - als SealedSecrets im Git-Repository versioniert
 - ausschließlich im Cluster entschlüsselt
 
-```text
+```yaml
 infra/ 
 └── k8s/     
 	└── apps/         
@@ -224,7 +224,7 @@ infra/
 ```
 _Dateistruktur der Sealed Secrets_
 
-```output
+```yaml
 PS C:\Users\miguel.schneider> kubeseal --controller-name "sealed-secrets" --controller-namespace "kube-system" --fetch-cert
 -----BEGIN CERTIFICATE-----
 MIIEzDCCArSgAwIBAgIQaW/IbK02PNctcQpjqggjnzANBgkqhkiG9w0BAQsFADAA
