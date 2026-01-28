@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: licensetool
-          image: docker.io/radballmigi/licensemonitor-dev:latest
+          image: docker.io/radballmigi/licensemonitor-demo:latest
           imagePullPolicy: Always
           ports:
             - name: http

@@ -3,13 +3,11 @@ name: Test, Build and Publish DEV - Test Pub
 on:
   push:
     branches:
-      - dev
-      - main # Wird hier verwendet, für Abgabe und Tests vor der finalen Veröffentlichung
+      - demo
 
   pull_request:
     branches:
-      - dev
-      - main # Wird hier verwendet, für Abgabe und Tests vor der finalen Veröffentlichung
+      - demo
 
     paths:
       - 'ressources/licensetool/**'
@@ -50,7 +48,7 @@ jobs:
         continue-on-error: false
   
   build:
-    name: Build Package (Artifact only, dev version)
+    name: Build Package (Artifact only, demo version)
     runs-on: ubuntu-latest
     needs: tests
 
@@ -72,8 +70,8 @@ jobs:
           pip install -r ${{ vars.WORKDIR }}/licensetool/requirements.txt
           pip install build
 
-      # automatische DEV-Version: <base>.dev<GITHUB_RUN_NUMBER>
-      - name: Set dev version in pyproject.toml
+      # automatische DEMO-Version: <base>.demo<GITHUB_RUN_NUMBER>
+      - name: Set demo version in pyproject.toml
         working-directory: ${{ vars.WORKDIR }}/licensetool
         run: |
           python - << 'PY'
@@ -230,8 +228,8 @@ jobs:
           file: ./${{ vars.WORKDIR }}/licensetool/dockerfile
           push: true
           tags: |
-            docker.io/${{ vars.DH_USERNAME }}/licensemonitor-dev:latest
-            docker.io/${{ vars.DH_USERNAME }}/licensemonitor-dev:${{ github.sha }}
+            docker.io/${{ vars.DH_USERNAME }}/licensemonitor-demo:latest
+            docker.io/${{ vars.DH_USERNAME }}/licensemonitor-demo:${{ github.sha }}
           build-args: |
             AZDO_PAT=${{ secrets.AZDO_PAT }}
 

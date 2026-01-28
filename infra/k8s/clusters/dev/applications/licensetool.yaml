@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: "https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit4-LicenseMonitor-K8s"
-    targetRevision: "main"
+    targetRevision: "demo"
     path: infra/k8s/apps/licensetool/overlays/dev
   destination:
     server: https://kubernetes.default.svc
