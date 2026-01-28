@@ -90,5 +90,6 @@ ___
 
 <a href="https://kubernetes.io/" target="_blank">Kubernetes Dokumentation (Kubernetes.io)</a>
 
+### **ArgoCD**
 
-
+<a href="https://argo-cd.readthedocs.io/" target="_blank">ArgoCD Dokumentation</a>

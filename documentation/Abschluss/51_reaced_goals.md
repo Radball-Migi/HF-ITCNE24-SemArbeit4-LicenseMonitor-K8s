@@ -25,6 +25,7 @@ werden konnten, ohne die übergeordneten Projektziele aus den Augen zu verlieren
 |Aufbau einer CI/CD-Pipeline|Automatisierung von Build-, Test- und Bereitstellungsprozessen mit iterativer Toolwahl.|⚠️✅|
 |Cloud-Native-Core-Architektur|Weiterentwicklung des bestehenden Tools in Richtung Containerisierung, Modularität und Skalierbarkeit.|✅|
 |Datenschutz, Stabilität und Betriebssicherheit|Sicherstellung eines sicheren, stabilen und reproduzierbaren Betriebs durch geeignete technische Massnahmen.|✅|
+
 Die Bewertung des Erfüllungsgrades erfolgte dabei nicht rein technisch,
 sondern unter Berücksichtigung von Architekturqualität, Wartbarkeit
 und langfristiger Betriebssicherheit.
