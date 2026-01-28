@@ -85,12 +85,12 @@ Zur Überprüfung des stabilen Betriebs wurden folgende Kubernetes-Kontrollen ei
 
 ### Pod- und Deployment-Status
 
-```Bash
+```PowerShell
 kubectl get pods -n licensetool 
 kubectl get deploy -n licensetool
 ```
 
-```Output
+```yaml
 PS C:\Users\miguel.schneider> kubectl get pods -n licensetool
 NAME                          READY   STATUS    RESTARTS      AGE
 licensetool-bc659b4f5-7wfnc   1/1     Running   2 (16m ago)   18h

@@ -111,6 +111,7 @@ Umgesetzte Kernprinzipien waren unter anderem:
 Die Anwendung wurde als Container-Image bereitgestellt, ohne die fachliche Logik zu verändern. Durch diese Entkopplung ist die Applikation unabhängig von der Laufzeitumgebung und eignet sich für automatisierte Deployments und Skalierung innerhalb von Kubernetes.
 
 ![aufbau](../../ressources/images/zielarchitektur.png)
+
 _Zielarchitektur_
 
 Die Applikation wird als Deployment mit mehreren Replikas betrieben und erfüllt damit zentrale Cloud-Native-Core-Prinzipien.
